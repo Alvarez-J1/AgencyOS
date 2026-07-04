@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LucideInfo } from '@lucide/angular';
 import { Router, RouterLink } from '@angular/router';
 
 import { PreviewTiltDirective } from '../../directives/preview-tilt.directive';
@@ -7,7 +8,7 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
-  imports: [FormsModule, RouterLink, PreviewTiltDirective],
+  imports: [FormsModule, RouterLink, PreviewTiltDirective, LucideInfo],
   templateUrl: './signup.html',
   styleUrls: ['../auth.scss', '../login/login.scss']
 })

@@ -129,11 +129,11 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   display: grid;
-  gap: var(--auth-card-gap, 24px);
+  gap: var(--auth-card-gap, 22px);
   isolation: isolate;
   justify-self: end;
   margin-top: 56px;
-  padding: var(--auth-card-padding, 32px);
+  padding: var(--auth-card-padding, 30px);
   position: relative;
   width: min(100%, var(--auth-card-width, 420px));
 }
@@ -214,7 +214,7 @@
 
 .demo-access {
   display: grid;
-  gap: var(--auth-demo-gap, 8px);
+  gap: var(--auth-demo-gap, 7px);
 }
 
 .login-card .demo-button {
@@ -224,11 +224,41 @@
   width: 100%;
 }
 
+.demo-notice {
+  align-items: start;
+  background:
+    linear-gradient(135deg, rgba(124, 156, 255, 0.105), rgba(45, 212, 191, 0.035)),
+    rgba(9, 13, 22, 0.54);
+  border: 1px solid rgba(124, 156, 255, 0.3);
+  border-radius: var(--radius-md);
+  color: rgba(255, 255, 255, 0.76);
+  display: grid;
+  font-size: 0.78rem;
+  font-weight: 650;
+  gap: 10px;
+  grid-template-columns: 18px minmax(0, 1fr);
+  line-height: 1.45;
+  padding: 10px 12px;
+}
+
+.demo-notice-icon {
+  color: var(--color-primary);
+  height: 17px;
+  margin-top: 1px;
+  stroke-width: 2;
+  width: 17px;
+}
+
+.demo-notice p {
+  margin: 0;
+  min-width: 0;
+}
+
 .demo-helper {
   color: var(--color-soft);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  line-height: 1.5;
+  line-height: 1.42;
   margin: 0;
 }
 
