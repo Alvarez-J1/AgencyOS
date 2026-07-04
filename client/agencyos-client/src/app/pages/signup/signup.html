@@ -156,13 +156,15 @@
       >
         {{ isDemoLoading ? 'Starting demo...' : 'View Demo' }}
       </button>
-      <div class="demo-notice" role="note">
-        <svg lucideInfo class="demo-notice-icon" aria-hidden="true"></svg>
-        <p>
-          Demo server is hosted on the free tier. The first request may take 30–60 seconds while the server wakes up
-          after inactivity. Please click "View Demo" again if needed.
-        </p>
-      </div>
+      @if (showDemoNotice) {
+        <div class="demo-notice" role="note">
+          <svg lucideInfo class="demo-notice-icon" aria-hidden="true"></svg>
+          <p>
+            Demo server is hosted on the free tier. The first request may take 30–60 seconds while the server wakes up
+            after inactivity. Please click "View Demo" again if needed.
+          </p>
+        </div>
+      }
       <p class="demo-helper">Skip sign up and explore the app with preloaded demo data.</p>
     </div>
 

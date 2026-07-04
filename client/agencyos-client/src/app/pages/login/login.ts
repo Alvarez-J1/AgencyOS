@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideInfo } from '@lucide/angular';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -12,7 +12,9 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.html',
   styleUrls: ['../auth.scss', './login.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+  private static readonly DEMO_NOTICE_DELAY_MS = 7000;
+  private demoNoticeTimer: ReturnType<typeof setTimeout> | null = null;
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
@@ -27,12 +29,17 @@ export class LoginComponent implements OnInit {
   submitted = false;
   isLoading = false;
   isDemoLoading = false;
+  showDemoNotice = false;
   showPassword = false;
   errorMessage = '';
   passwordPlaceholder = 'Enter your password';
 
   ngOnInit(): void {
     this.updatePasswordPlaceholder();
+  }
+
+  ngOnDestroy(): void {
+    this.clearDemoNoticeTimer();
   }
 
   get emailInvalid(): boolean {
@@ -88,17 +95,36 @@ export class LoginComponent implements OnInit {
 
     this.errorMessage = '';
     this.isDemoLoading = true;
+    this.showDemoNotice = false;
+
+    // Only surface the free-tier "waking up" notice if the request is unusually slow.
+    this.demoNoticeTimer = setTimeout(() => {
+      if (this.isDemoLoading) {
+        this.showDemoNotice = true;
+      }
+    }, LoginComponent.DEMO_NOTICE_DELAY_MS);
 
     this.authService.demoLogin().subscribe({
       next: () => {
+        this.clearDemoNoticeTimer();
         this.isDemoLoading = false;
+        this.showDemoNotice = false;
         const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
         this.router.navigateByUrl(returnUrl);
       },
       error: (error) => {
+        this.clearDemoNoticeTimer();
         this.isDemoLoading = false;
+        this.showDemoNotice = false;
         this.errorMessage = error.error?.message || 'Unable to start the demo right now. Please try again.';
       }
     });
+  }
+
+  private clearDemoNoticeTimer(): void {
+    if (this.demoNoticeTimer !== null) {
+      clearTimeout(this.demoNoticeTimer);
+      this.demoNoticeTimer = null;
+    }
   }
 }
