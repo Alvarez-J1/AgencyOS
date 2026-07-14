@@ -3,35 +3,10 @@ const mongoose = require('mongoose');
 const generateToken = require('../utils/generateToken');
 const User = require('../models/User');
 const Client = require('../models/Client');
+const ClientActivity = require('../models/ClientActivity');
 const Project = require('../models/Project');
 const Task = require('../models/Task');
-
-const DEMO_USER = {
-  name: 'Demo Account',
-  email: 'demo@agencyos.com',
-  password: 'password123'
-};
-
-const DEMO_CLIENTS = [
-  { id: 1, name: 'Sarah Chen', company: 'Northwind Labs', email: 'sarah@northwind.io', status: 'Active', activeProjects: 2, lastContact: '2 days ago' },
-  { id: 2, name: 'Marcus Lee', company: 'Brightwave Media', email: 'marcus@brightwave.co', status: 'Active', activeProjects: 1, lastContact: '1 week ago' },
-  { id: 3, name: 'Priya Patel', company: 'Atlas Logistics', email: 'priya@atlaslogistics.com', status: 'Onboarding', activeProjects: 0, lastContact: 'Yesterday' },
-  { id: 4, name: 'Daniel Romero', company: 'Vertex Studio', email: 'daniel@vertexstudio.design', status: 'Paused', activeProjects: 0, lastContact: '3 weeks ago' }
-];
-
-const DEMO_PROJECTS = [
-  { id: 1, name: 'Website Redesign', client: 'Northwind Labs', status: 'In Progress', dueDate: '2026-07-15', progress: 65, notes: 'New marketing site with refreshed brand system.' },
-  { id: 2, name: 'Brand Campaign Q3', client: 'Brightwave Media', status: 'Planning', dueDate: '2026-08-01', progress: 20, notes: 'Multi-channel launch for the autumn product line.' },
-  { id: 3, name: 'Onboarding Portal', client: 'Atlas Logistics', status: 'Review', dueDate: '2026-07-05', progress: 85, notes: 'Self-serve onboarding flow for new partners.' },
-  { id: 4, name: 'Mobile App Launch', client: 'Northwind Labs', status: 'Completed', dueDate: '2026-06-10', progress: 100, notes: 'Shipped to the App Store and Play Store.' }
-];
-
-const DEMO_TASKS = [
-  { id: 1, title: 'Finalize homepage mockups', project: 'Website Redesign', assignee: 'Demo Account', priority: 'High', status: 'In Progress', dueDate: '2026-07-01', notes: 'Awaiting sign-off from the client.' },
-  { id: 2, title: 'Draft campaign brief', project: 'Brand Campaign Q3', assignee: 'Demo Account', priority: 'Medium', status: 'Todo', dueDate: '2026-07-03', notes: '' },
-  { id: 3, title: 'QA onboarding flow', project: 'Onboarding Portal', assignee: 'Demo Account', priority: 'High', status: 'Todo', dueDate: '2026-07-04', notes: 'Test edge cases for partner invites.' },
-  { id: 4, title: 'Publish app to stores', project: 'Mobile App Launch', assignee: 'Demo Account', priority: 'Medium', status: 'Completed', dueDate: '2026-06-09', notes: 'Released v1.0.' }
-];
+const { DEMO_USER, buildDemoWorkspace } = require('../data/demoWorkspace');
 
 const buildAuthResponse = (user) => ({
   token: generateToken(user._id),
@@ -45,18 +20,31 @@ const buildAuthResponse = (user) => ({
 const isDatabaseReady = () => mongoose.connection.readyState === 1;
 
 const seedDemoWorkspace = async (ownerId) => {
-  const existingClients = await Client.countDocuments({ owner: ownerId });
+  const [existingClients, existingProjects, existingTasks, completedTasksWithDates] = await Promise.all([
+    Client.countDocuments({ owner: ownerId }),
+    Project.countDocuments({ owner: ownerId }),
+    Task.countDocuments({ owner: ownerId }),
+    Task.countDocuments({ owner: ownerId, status: 'Completed', completedAt: { $exists: true, $ne: null } })
+  ]);
 
-  if (existingClients > 0) {
+  if (existingClients >= 20 && existingProjects >= 12 && existingTasks >= 35 && completedTasksWithDates >= 25) {
     return;
   }
 
   const withOwner = (records) => records.map((record) => ({ ...record, owner: ownerId }));
+  const { clients, projects, tasks } = buildDemoWorkspace();
 
   await Promise.all([
-    Client.insertMany(withOwner(DEMO_CLIENTS)),
-    Project.insertMany(withOwner(DEMO_PROJECTS)),
-    Task.insertMany(withOwner(DEMO_TASKS))
+    Client.deleteMany({ owner: ownerId }),
+    ClientActivity.deleteMany({ owner: ownerId }),
+    Project.deleteMany({ owner: ownerId }),
+    Task.deleteMany({ owner: ownerId })
+  ]);
+
+  await Promise.all([
+    Client.insertMany(withOwner(clients)),
+    Project.insertMany(withOwner(projects)),
+    Task.insertMany(withOwner(tasks))
   ]);
 };
 

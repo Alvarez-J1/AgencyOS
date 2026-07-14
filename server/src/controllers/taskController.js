@@ -1,5 +1,17 @@
 const Task = require('../models/Task');
 
+const buildCompletionUpdate = (status, currentTask) => {
+  if (status === undefined) {
+    return {};
+  }
+
+  if (status === 'Completed') {
+    return currentTask?.completedAt ? {} : { completedAt: new Date() };
+  }
+
+  return { completedAt: null };
+};
+
 const createTask = async (req, res) => {
   try {
     const {
@@ -28,6 +40,7 @@ const createTask = async (req, res) => {
       priority,
       status,
       dueDate,
+      ...buildCompletionUpdate(status),
       notes
     });
 
@@ -63,14 +76,18 @@ const updateTask = async (req, res) => {
       }
     });
 
+    const existingTask = await Task.findOne({ owner: req.user._id, id }).lean();
+
+    if (!existingTask) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    Object.assign(updates, buildCompletionUpdate(updates.status, existingTask));
+
     const task = await Task.findOneAndUpdate({ owner: req.user._id, id }, updates, {
       new: true,
       runValidators: true
     }).lean();
-
-    if (!task) {
-      return res.status(404).json({ message: 'Task not found' });
-    }
 
     return res.json(task);
   } catch (error) {

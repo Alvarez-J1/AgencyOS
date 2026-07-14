@@ -36,6 +36,16 @@ interface MetricBadge {
   tone: MetricBadgeTone;
 }
 
+interface TaskActivityPoint {
+  dateLabel: string;
+  index: number;
+  tooltipX: number;
+  tooltipY: number;
+  value: number;
+  x: number;
+  y: number;
+}
+
 @Component({
   selector: 'app-dashboard',
   imports: [RouterLink],
@@ -48,15 +58,24 @@ export class DashboardComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
   private readonly taskService = inject(TaskService);
   private readonly currentUser = this.authService.getCurrentUser();
+  private readonly taskActivityDays = 30;
+  private readonly taskActivityChartWidth = 280;
+  private readonly taskActivityChartLeftInset = 0;
+  private readonly taskActivityChartRightInset = 0;
+  private readonly taskActivityChartHeight = 104;
+  private readonly taskActivityChartTop = 8;
+  private readonly taskActivityChartBottom = 90;
 
   clients: Client[] = [];
   projects: Project[] = [];
   tasks: Task[] = [];
   isLoading = true;
   errorMessage = '';
+  hoveredTaskActivityPoint: TaskActivityPoint | null = null;
   private hasApiError = false;
 
   readonly welcomeName = this.currentUser?.name.trim().split(/\s+/)[0] ?? 'there';
+  readonly taskActivityGridLines = [16, 39, 62, 85];
 
   ngOnInit(): void {
     forkJoin({
@@ -120,18 +139,97 @@ export class DashboardComponent implements OnInit {
     return `${this.completedTasks} of ${this.tasks.length} tasks completed`;
   }
 
+  get taskActivityMetricValue(): number {
+    return this.completedTasks;
+  }
+
+  get taskActivityMetricLabel(): string {
+    return this.taskActivityMetricValue === 1 ? 'Task completed' : 'Tasks completed';
+  }
+
+  get taskActivityTrendBadge(): string {
+    const currentPeriod = this.getCompletedTaskCountBetween(0, this.taskActivityDays - 1);
+    const previousPeriod = this.getCompletedTaskCountBetween(this.taskActivityDays, this.taskActivityDays * 2 - 1);
+
+    if (previousPeriod === 0) {
+      return currentPeriod > 0 ? `+${currentPeriod} vs last month` : 'No change';
+    }
+
+    const trendPercent = Math.round(((currentPeriod - previousPeriod) / previousPeriod) * 100);
+    return `${trendPercent >= 0 ? '+' : ''}${trendPercent}% vs last month`;
+  }
+
+  get taskActivityLinePath(): string {
+    return this.buildSmoothChartPath(this.taskActivityPoints);
+  }
+
+  get taskActivityAreaPath(): string {
+    const points = this.taskActivityPoints;
+    const linePath = this.buildSmoothChartPath(points);
+    const firstPoint = points[0];
+    const lastPoint = points[points.length - 1];
+
+    if (!firstPoint || !lastPoint) {
+      return '';
+    }
+
+    return `${linePath} L ${this.formatChartNumber(lastPoint.x)} ${this.taskActivityChartHeight} L ${this.formatChartNumber(
+      firstPoint.x
+    )} ${this.taskActivityChartHeight} Z`;
+  }
+
+  get taskActivityPoints(): TaskActivityPoint[] {
+    const counts = this.getTaskActivityCounts();
+    const values = this.getTaskActivityValues(counts);
+    const minValue = Math.min(...values);
+    const maxValue = Math.max(...values);
+    const valueRange = maxValue - minValue || 1;
+    const chartRange = this.taskActivityChartBottom - this.taskActivityChartTop;
+    const startDate = this.getTaskActivityStartDate();
+
+    return values.map((value, index) => {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + index);
+
+      const progress = (value - minValue) / valueRange;
+      const x =
+        this.taskActivityChartLeftInset +
+        (index / (this.taskActivityDays - 1)) *
+          (this.taskActivityChartWidth - this.taskActivityChartLeftInset - this.taskActivityChartRightInset);
+      const y = this.taskActivityChartBottom - progress * chartRange;
+
+      return {
+        dateLabel: this.formatTaskActivityDate(date),
+        index,
+        tooltipX: Math.min(86, Math.max(14, (x / this.taskActivityChartWidth) * 100)),
+        tooltipY: Math.min(78, Math.max(18, (y / this.taskActivityChartHeight) * 100)),
+        value: counts[index],
+        x,
+        y
+      };
+    });
+  }
+
   get totalClientsCopy(): string {
     return this.totalClients === 1
-      ? '1 client in your workspace.'
-      : `${this.totalClients} clients in your workspace.`;
+      ? '1 total client.'
+      : `${this.totalClients} total clients.`;
   }
 
   get activeProjectsCopy(): string {
-    return this.activeProjects === 0 ? 'No active projects.' : `${this.activeProjects} active projects.`;
+    return `${this.activeProjects} active ${this.activeProjects === 1 ? 'project' : 'projects'}.`;
+  }
+
+  get completedProjectsCopy(): string {
+    return `${this.completedProjects} completed ${this.completedProjects === 1 ? 'project' : 'projects'}.`;
   }
 
   get pendingTasksCopy(): string {
-    return this.pendingTasks === 0 ? "You're all caught up." : `${this.pendingTasks} tasks need your attention.`;
+    return `${this.pendingTasks} pending ${this.pendingTasks === 1 ? 'task' : 'tasks'}.`;
+  }
+
+  get completedTasksCopy(): string {
+    return `${this.completedTasks} completed ${this.completedTasks === 1 ? 'task' : 'tasks'}.`;
   }
 
   get totalClientsBadge(): MetricBadge | null {
@@ -331,6 +429,143 @@ export class DashboardComponent implements OnInit {
 
     const now = new Date();
     return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth();
+  }
+
+  setHoveredTaskActivityPoint(point: TaskActivityPoint): void {
+    this.hoveredTaskActivityPoint = point;
+  }
+
+  clearHoveredTaskActivityPoint(): void {
+    this.hoveredTaskActivityPoint = null;
+  }
+
+  private getTaskActivityCounts(): number[] {
+    const buckets = Array.from({ length: this.taskActivityDays }, () => 0);
+    const millisecondsPerDay = 86_400_000;
+    const windowStart = this.getTaskActivityStartDate().getTime();
+
+    this.tasks
+      .filter((task) => task.status === 'Completed')
+      .forEach((task) => {
+        const activityDate = this.getTaskActivityDate(task);
+
+        if (!activityDate) {
+          return;
+        }
+
+        const activityDay = new Date(activityDate.getFullYear(), activityDate.getMonth(), activityDate.getDate());
+        const bucketIndex = Math.floor((activityDay.getTime() - windowStart) / millisecondsPerDay);
+
+        if (bucketIndex >= 0 && bucketIndex < buckets.length) {
+          buckets[bucketIndex] += 1;
+        }
+      });
+
+    return buckets;
+  }
+
+  private getTaskActivityValues(counts: number[]): number[] {
+    return counts.map((count, index) => {
+      const previousThree = counts[index - 3] ?? 0;
+      const previousTwo = counts[index - 2] ?? 0;
+      const previous = counts[index - 1] ?? 0;
+      const next = counts[index + 1] ?? 0;
+      const nextTwo = counts[index + 2] ?? 0;
+      const nextThree = counts[index + 3] ?? 0;
+      const completedSoFar = counts.slice(0, index + 1).reduce((total, value) => total + value, 0);
+      const cumulativeProgress = completedSoFar / Math.max(1, this.completedTasks);
+
+      return (
+        count * 0.8 +
+        previous * 0.52 +
+        next * 0.46 +
+        previousTwo * 0.3 +
+        nextTwo * 0.26 +
+        previousThree * 0.12 +
+        nextThree * 0.1 +
+        cumulativeProgress * 0.42
+      );
+    });
+  }
+
+  private getTaskActivityDate(task: Task): Date | null {
+    const dateValue = task.completedAt || task.dueDate || task.updatedAt || task.createdAt;
+
+    if (!dateValue) {
+      return null;
+    }
+
+    const date = new Date(dateValue);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  private getCompletedTaskCountBetween(startDaysAgo: number, endDaysAgo: number): number {
+    const today = new Date();
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const startTime = todayStart.getTime() - endDaysAgo * 86_400_000;
+    const endTime = todayStart.getTime() - startDaysAgo * 86_400_000;
+
+    return this.tasks.filter((task) => {
+      if (task.status !== 'Completed') {
+        return false;
+      }
+
+      const activityDate = this.getTaskActivityDate(task);
+
+      if (!activityDate) {
+        return false;
+      }
+
+      const activityDay = new Date(activityDate.getFullYear(), activityDate.getMonth(), activityDate.getDate()).getTime();
+      return activityDay >= startTime && activityDay <= endTime;
+    }).length;
+  }
+
+  private getTaskActivityStartDate(): Date {
+    const today = new Date();
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    todayStart.setDate(todayStart.getDate() - (this.taskActivityDays - 1));
+    return todayStart;
+  }
+
+  private formatTaskActivityDate(date: Date): string {
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+  }
+
+  private buildSmoothChartPath(points: TaskActivityPoint[]): string {
+    if (points.length === 0) {
+      return '';
+    }
+
+    const [firstPoint] = points;
+    const path = [`M ${this.formatChartNumber(firstPoint.x)} ${this.formatChartNumber(firstPoint.y)}`];
+
+    for (let index = 0; index < points.length - 1; index += 1) {
+      const previous = points[index - 1] ?? points[index];
+      const current = points[index];
+      const next = points[index + 1];
+      const afterNext = points[index + 2] ?? next;
+      const controlPointOne = {
+        x: current.x + (next.x - previous.x) / 6,
+        y: current.y + (next.y - previous.y) / 6
+      };
+      const controlPointTwo = {
+        x: next.x - (afterNext.x - current.x) / 6,
+        y: next.y - (afterNext.y - current.y) / 6
+      };
+
+      path.push(
+        `C ${this.formatChartNumber(controlPointOne.x)} ${this.formatChartNumber(controlPointOne.y)}, ${this.formatChartNumber(
+          controlPointTwo.x
+        )} ${this.formatChartNumber(controlPointTwo.y)}, ${this.formatChartNumber(next.x)} ${this.formatChartNumber(next.y)}`
+      );
+    }
+
+    return path.join(' ');
+  }
+
+  private formatChartNumber(value: number): string {
+    return Number(value.toFixed(2)).toString();
   }
 
   private handleLoadError<T>(fallback: T) {

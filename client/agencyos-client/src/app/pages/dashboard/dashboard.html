@@ -2,26 +2,113 @@
   <section class="dashboard-section overview-section" aria-labelledby="overview-heading">
     <header class="dashboard-hero">
       <div class="hero-copy">
-        <p class="eyebrow hero-kicker">Overview</p>
+        <p class="eyebrow hero-kicker" style="color: var(--color-primary);">Overview</p>
         <h1 id="overview-heading">Welcome back, {{ welcomeName }}</h1>
         <p>See the latest activity across your clients, projects, and tasks.</p>
       </div>
 
-      <aside class="hero-health" aria-label="Workspace health">
-        <span>Workspace health</span>
-        @if (!isLoading && !errorMessage) {
-          <strong>{{ taskCompletionRate }}%</strong>
-          <p>{{ taskCompletionCopy }}</p>
-          <div class="health-meter" aria-hidden="true">
-            <span [style.width.%]="taskCompletionRate"></span>
+      <aside class="task-activity-card" aria-label="Task activity">
+        <div
+          class="task-activity-summary"
+          style="align-items: start; column-gap: 16px; display: grid; grid-template-areas: 'title value' 'subtitle label' 'badge badge'; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto auto; row-gap: 0;"
+        >
+          <div class="task-activity-header" style="display: contents;">
+            <span style="grid-area: title;">Task Activity</span>
+            <p style="align-self: center; grid-area: subtitle;">Last 30 days</p>
+            <span class="metric-trend trend-positive" style="grid-area: badge; justify-self: start; margin-top: 5px;">
+              {{ taskActivityTrendBadge }}
+            </span>
           </div>
-        } @else {
-          <strong>Live</strong>
-          <p>Preparing your dashboard metrics</p>
-          <div class="health-meter health-meter-loading" aria-hidden="true">
-            <span></span>
+
+          <div class="task-activity-kpi" style="display: contents;">
+            @if (!isLoading && !errorMessage) {
+              <strong style="grid-area: value; justify-self: end;">{{ taskActivityMetricValue }}</strong>
+              <span style="align-self: center; grid-area: label; justify-self: end;">{{ taskActivityMetricLabel }}</span>
+            } @else {
+              <strong style="grid-area: value; justify-self: end;">Live</strong>
+              <span style="align-self: center; grid-area: label; justify-self: end;">Preparing activity</span>
+            }
           </div>
-        }
+        </div>
+
+        <div
+          style="align-self: start; justify-self: stretch; min-width: 0; position: relative; width: 100%;"
+          (mouseleave)="clearHoveredTaskActivityPoint()"
+        >
+          <svg
+            style="color: var(--color-primary); display: block; height: 88px; width: 100%;"
+            viewBox="0 0 280 104"
+            preserveAspectRatio="none"
+            role="img"
+            aria-label="Task completion activity over the last 30 days"
+          >
+            <defs>
+              <linearGradient id="taskActivityFillGradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#7c9cff" stop-opacity="0.15" />
+                <stop offset="100%" stop-color="#7c9cff" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+
+            @for (gridLine of taskActivityGridLines; track gridLine) {
+              <line
+                x1="0"
+                x2="280"
+                stroke="rgba(229, 231, 235, 0.075)"
+                stroke-width="1"
+                vector-effect="non-scaling-stroke"
+                [attr.y1]="gridLine"
+                [attr.y2]="gridLine"
+              />
+            }
+
+            <path fill="url(#taskActivityFillGradient)" [attr.d]="taskActivityAreaPath" />
+            <path
+              class="task-activity-line"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              vector-effect="non-scaling-stroke"
+              [attr.stroke-width]="hoveredTaskActivityPoint ? 2.7 : 2"
+              [attr.d]="taskActivityLinePath"
+            />
+
+            @for (point of taskActivityPoints; track point.index) {
+              <rect
+                y="0"
+                width="10"
+                height="104"
+                fill="transparent"
+                cursor="crosshair"
+                [attr.x]="point.x - 5"
+                (mouseenter)="setHoveredTaskActivityPoint(point)"
+              />
+            }
+
+            @if (hoveredTaskActivityPoint; as point) {
+              <circle
+                fill="#e5e7eb"
+                stroke="#7c9cff"
+                stroke-width="2"
+                r="4"
+                [attr.cx]="point.x"
+                [attr.cy]="point.y"
+              />
+            }
+          </svg>
+
+          @if (hoveredTaskActivityPoint; as point) {
+            <div
+              style="background: rgba(10, 11, 15, 0.94); border: 1px solid var(--dash-border-strong); border-radius: var(--dash-radius); box-shadow: var(--dash-shadow); display: grid; gap: 2px; min-width: 112px; padding: 8px; pointer-events: none; position: absolute; transform: translate(-50%, -112%);"
+              [style.left.%]="point.tooltipX"
+              [style.top.%]="point.tooltipY"
+            >
+              <span style="color: var(--color-soft); font-size: 0.72rem; font-weight: 850;">{{ point.dateLabel }}</span>
+              <strong style="font-size: 0.78rem;">Tasks completed</strong>
+              <em style="font-size: 1.08rem; font-style: normal; font-weight: 900;">{{ point.value }}</em>
+            </div>
+          }
+        </div>
       </aside>
     </header>
 
@@ -46,9 +133,9 @@
       </div>
     } @else {
       <section class="metric-grid" aria-label="Workspace metrics">
-        <article class="metric-card metric-card-primary">
-          @if (totalClientsBadge; as badge) {
-            <div class="metric-card-top">
+        <article class="metric-card">
+          <div class="metric-card-top">
+            @if (totalClientsBadge; as badge) {
               <span
                 class="metric-trend"
                 [class.trend-positive]="badge.tone === 'positive'"
@@ -57,9 +144,9 @@
               >
                 {{ badge.text }}
               </span>
-            </div>
-          }
-          <div class="metric-copy">
+            }
+          </div>
+          <div class="metric-copy" style="font-weight: 800;">
             <span>Total clients</span>
             <strong>{{ totalClients }}</strong>
           </div>
@@ -67,8 +154,8 @@
         </article>
 
         <article class="metric-card">
-          @if (activeProjectsBadge; as badge) {
-            <div class="metric-card-top">
+          <div class="metric-card-top">
+            @if (activeProjectsBadge; as badge) {
               <span
                 class="metric-trend"
                 [class.trend-positive]="badge.tone === 'positive'"
@@ -77,9 +164,9 @@
               >
                 {{ badge.text }}
               </span>
-            </div>
-          }
-          <div class="metric-copy">
+            }
+          </div>
+          <div class="metric-copy" style="font-weight: 800;">
             <span>Active projects</span>
             <strong>{{ activeProjects }}</strong>
           </div>
@@ -87,8 +174,8 @@
         </article>
 
         <article class="metric-card">
-          @if (completedProjectsBadge; as badge) {
-            <div class="metric-card-top">
+          <div class="metric-card-top">
+            @if (completedProjectsBadge; as badge) {
               <span
                 class="metric-trend"
                 [class.trend-positive]="badge.tone === 'positive'"
@@ -97,18 +184,18 @@
               >
                 {{ badge.text }}
               </span>
-            </div>
-          }
-          <div class="metric-copy">
-            <span>Completed projects</span>
+            }
+          </div>
+          <div class="metric-copy" style="font-weight: 800;">
+            <span class="metric-title-compact">Completed projects</span>
             <strong>{{ completedProjects }}</strong>
           </div>
-          <p>Completed projects are available for reference.</p>
+          <p>{{ completedProjectsCopy }}</p>
         </article>
 
         <article class="metric-card">
-          @if (pendingTasksBadge; as badge) {
-            <div class="metric-card-top">
+          <div class="metric-card-top">
+            @if (pendingTasksBadge; as badge) {
               <span
                 class="metric-trend"
                 [class.trend-positive]="badge.tone === 'positive'"
@@ -117,9 +204,9 @@
               >
                 {{ badge.text }}
               </span>
-            </div>
-          }
-          <div class="metric-copy">
+            }
+          </div>
+          <div class="metric-copy" style="font-weight: 800;">
             <span>Pending tasks</span>
             <strong>{{ pendingTasks }}</strong>
           </div>
@@ -127,8 +214,8 @@
         </article>
 
         <article class="metric-card">
-          @if (completedTasksBadge; as badge) {
-            <div class="metric-card-top">
+          <div class="metric-card-top">
+            @if (completedTasksBadge; as badge) {
               <span
                 class="metric-trend"
                 [class.trend-positive]="badge.tone === 'positive'"
@@ -137,13 +224,13 @@
               >
                 {{ badge.text }}
               </span>
-            </div>
-          }
-          <div class="metric-copy">
+            }
+          </div>
+          <div class="metric-copy" style="font-weight: 800;">
             <span>Completed tasks</span>
             <strong>{{ completedTasks }}</strong>
           </div>
-          <p>Track completed work over time.</p>
+          <p>{{ completedTasksCopy }}</p>
         </article>
       </section>
     }

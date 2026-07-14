@@ -10,6 +10,7 @@ export type Task = {
   priority: TaskPriority;
   status: TaskStatus;
   dueDate: string;
+  completedAt?: string;
   notes?: string;
   createdAt?: string;
   updatedAt?: string;
