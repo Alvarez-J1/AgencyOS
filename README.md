@@ -1,7 +1,8 @@
 # AgencyOS — Agency Management Platform
 AgencyOS is a full-stack agency management platform that helps teams manage clients, projects, and tasks from a single workspace. It features secure authentication, responsive dashboards, and complete CRUD functionality powered by a Node.js, Express, and MongoDB backend.
 
-<img width="1920" height="918" alt="AgencyOS" src="https://github.com/user-attachments/assets/02198a3e-2f00-43ab-9c65-8b8744773900" />
+<img width="1520" height="727" alt="image" src="https://github.com/user-attachments/assets/364fd74e-e309-4301-b549-e8909292bc56" />
+
 
 ## Live Demo
 
@@ -37,27 +38,6 @@ Angular • TypeScript • RxJS • SCSS • Node.js • Express • MongoDB •
 * Structuring a scalable full-stack application
 * Building responsive dashboard layouts
   
-## Screenshots
-<img width="1920" height="1098" alt="image" src="https://github.com/user-attachments/assets/af3c58eb-6c17-475a-ad11-24151ff7497d" />
-
-### Clients
-
-<img width="1920" height="918" alt="image" src="https://github.com/user-attachments/assets/7c2789b3-b955-4377-bd0e-674d0c9e2303" />
-
-### Projects
-
-<img width="1920" height="918" alt="image" src="https://github.com/user-attachments/assets/ea43691a-c57f-45d8-bc65-fe850043fb4a" />
-
-
-### Tasks
-
-<img width="1920" height="918" alt="image" src="https://github.com/user-attachments/assets/7a131619-7bb7-4e1b-9fc4-64f9db6f47dc" />
-
-
-### Mobile View
-
-<img width="267" height="646" alt="image" src="https://github.com/user-attachments/assets/8167db4e-1120-45ee-9f85-ba1ba11e66c2" />
-
 ## Getting Started
 
 ### Prerequisites
