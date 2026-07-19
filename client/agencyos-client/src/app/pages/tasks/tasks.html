@@ -205,7 +205,6 @@
   @if (isLoading) {
     <div class="state-panel" role="status" aria-live="polite" aria-busy="true">
       <h2 class="loading-indicator">Loading tasks</h2>
-      <p>Fetching task records from the AgencyOS API.</p>
     </div>
   } @else if (errorMessage) {
     <div class="state-panel state-panel-error" role="alert">

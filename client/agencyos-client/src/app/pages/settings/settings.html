@@ -10,7 +10,6 @@
   @if (isLoading) {
     <div class="state-panel" role="status" aria-live="polite" aria-busy="true">
       <h2 class="loading-indicator">Loading settings</h2>
-      <p>Preparing your workspace preferences.</p>
     </div>
   } @else if (errorMessage && !settings) {
     <div class="state-panel state-panel-error" role="alert">

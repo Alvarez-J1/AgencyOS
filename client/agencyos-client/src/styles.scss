@@ -1,8 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 :root {
-  --font-body: "Manrope";
-  --font-display: "Space Grotesk";
+  --font-body: 'Manrope';
+  --font-display: 'Space Grotesk';
   --color-background: #0a0b0f;
   --color-surface: #141922;
   --color-surface-raised: #181d26;
@@ -197,7 +197,9 @@ button:disabled {
 
 .card:hover {
   border-color: var(--color-border-strong);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 18px 52px rgba(0, 0, 0, 0.26);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 18px 52px rgba(0, 0, 0, 0.26);
 }
 
 .card h2,
@@ -320,7 +322,7 @@ button:disabled {
   border: 3px solid var(--color-border);
   border-top-color: var(--color-primary);
   border-radius: 999px;
-  content: "";
+  content: '';
   height: 16px;
   width: 16px;
 }
@@ -599,7 +601,7 @@ button:disabled {
   background:
     radial-gradient(circle at 50% 50%, rgba(124, 156, 255, 0.34), transparent 62%),
     radial-gradient(circle at 60% 42%, rgba(45, 212, 191, 0.12), transparent 58%);
-  content: "";
+  content: '';
   filter: blur(32px);
   inset: -18% -12% -14%;
   opacity: var(--preview-glow-opacity);
@@ -619,11 +621,8 @@ button:disabled {
     0 18px 52px rgba(0, 0, 0, 0.28);
   overflow: hidden;
   position: relative;
-  transform:
-    rotateX(var(--preview-rotate-x))
-    rotateY(var(--preview-rotate-y))
-    scale(var(--preview-scale))
-    translateZ(0);
+  transform: rotateX(var(--preview-rotate-x)) rotateY(var(--preview-rotate-y))
+    scale(var(--preview-scale)) translateZ(0);
   transform-style: preserve-3d;
   transition:
     border-color 180ms ease,
@@ -672,5 +671,1223 @@ button:disabled {
 
   .product-preview::before {
     opacity: 0.42;
+  }
+}
+
+/* Dashboard overview analytics */
+app-dashboard .hero-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+app-dashboard .hero-action {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  line-height: 1;
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+app-dashboard .workspace-health-card {
+  background:
+    radial-gradient(circle at 88% 18%, rgba(124, 156, 255, 0.14), transparent 12rem),
+    radial-gradient(circle at 18% 96%, rgba(99, 102, 241, 0.08), transparent 10rem),
+    linear-gradient(180deg, rgba(20, 25, 36, 0.9), rgba(15, 18, 24, 0.88));
+  border: 1px solid rgba(124, 156, 255, 0.13);
+  border-radius: var(--dash-radius);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 18px 48px rgba(0, 0, 0, 0.24),
+    0 0 34px rgba(124, 156, 255, 0.055);
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 24px;
+}
+
+app-dashboard .workspace-health-header {
+  align-items: start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+app-dashboard .workspace-health-header > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+app-dashboard .workspace-health-header span:not(.metric-trend) {
+  color: var(--color-soft);
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+app-dashboard .workspace-health-header p {
+  color: var(--color-muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  margin: 0;
+}
+
+app-dashboard .workspace-health-primary {
+  column-gap: 18px;
+  display: grid;
+  grid-template-areas:
+    'value value'
+    'label trend';
+  grid-template-columns: minmax(0, 1fr) auto;
+  row-gap: 4px;
+  min-width: 0;
+}
+
+app-dashboard .workspace-health-primary strong {
+  font-size: 3.05rem;
+  font-weight: 900;
+  grid-area: value;
+  line-height: 0.95;
+}
+
+app-dashboard .workspace-health-label {
+  color: var(--color-muted);
+  font-size: 0.84rem;
+  font-weight: 750;
+  grid-area: label;
+  line-height: 1.35;
+}
+
+app-dashboard .workspace-health-trend {
+  align-self: center;
+  font-size: 0.68rem;
+  grid-area: trend;
+  justify-self: end;
+  line-height: 1;
+  min-height: 20px;
+  padding: 0 6px;
+  transform: translateY(-2px);
+  white-space: nowrap;
+}
+
+app-dashboard .workspace-health-stats {
+  display: grid;
+  gap: 6px;
+}
+
+app-dashboard .workspace-health-stat {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  min-width: 0;
+}
+
+app-dashboard .workspace-health-stat span {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+app-dashboard .workspace-health-stat strong {
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+app-dashboard .workspace-health-chart {
+  color: var(--color-primary);
+  min-width: 0;
+  position: relative;
+}
+
+app-dashboard .workspace-health-chart svg {
+  display: block;
+  height: 68px;
+  overflow: visible;
+  width: 100%;
+}
+
+app-dashboard .workspace-health-line {
+  stroke: currentColor;
+  stroke-dasharray: none;
+  stroke-dashoffset: 0;
+  stroke-opacity: 0.96;
+  transition: stroke-width 180ms ease;
+}
+
+app-dashboard .workspace-health-tooltip {
+  background: rgba(10, 11, 15, 0.96);
+  border: 1px solid var(--dash-border-strong);
+  border-radius: var(--dash-radius);
+  box-shadow: var(--dash-shadow);
+  display: grid;
+  gap: 6px;
+  min-width: 144px;
+  padding: 10px;
+  pointer-events: none;
+  position: absolute;
+  transform: translate(-50%, -108%);
+  z-index: 2;
+}
+
+app-dashboard .workspace-health-tooltip > span {
+  color: var(--color-soft);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+app-dashboard .workspace-health-tooltip div {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+app-dashboard .workspace-health-tooltip small {
+  color: var(--color-muted);
+  font-size: 0.7rem;
+}
+
+app-dashboard .workspace-health-tooltip strong {
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+@keyframes drawWorkspaceHealth {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+app-dashboard .metric-card.metric-card-enhanced {
+  --metric-accent: var(--color-primary);
+  --metric-accent-border: rgba(124, 156, 255, 0.18);
+  --metric-accent-glow: rgba(124, 156, 255, 0.12);
+  --metric-accent-soft: rgba(124, 156, 255, 0.1);
+  --metric-chart-fill: rgba(124, 156, 255, 0.1);
+  --metric-chart-line: #7c9cff;
+
+  gap: 12px;
+  grid-template-rows: auto auto auto 30px auto;
+  min-height: 214px;
+  overflow: hidden;
+  position: relative;
+}
+
+app-dashboard .metric-card.metric-card-enhanced::before {
+  background: linear-gradient(90deg, transparent, var(--metric-accent), transparent);
+  content: '';
+  height: 1px;
+  inset: 0 14px auto;
+  opacity: 0.62;
+  position: absolute;
+}
+
+app-dashboard .metric-card.metric-card-enhanced::after {
+  background: radial-gradient(circle at 84% 0%, var(--metric-accent-glow), transparent 9rem);
+  content: '';
+  inset: 0;
+  opacity: 0.6;
+  pointer-events: none;
+  position: absolute;
+}
+
+app-dashboard .metric-card.metric-card-enhanced > * {
+  position: relative;
+  z-index: 1;
+}
+
+app-dashboard .metric-card.metric-card-enhanced:hover {
+  border-color: var(--metric-accent-border);
+}
+
+app-dashboard .metric-accent-blue {
+  --metric-accent: #7c9cff;
+  --metric-accent-border: rgba(124, 156, 255, 0.2);
+  --metric-accent-glow: rgba(124, 156, 255, 0.13);
+  --metric-accent-soft: rgba(124, 156, 255, 0.1);
+  --metric-chart-fill: rgba(124, 156, 255, 0.1);
+  --metric-chart-line: #7c9cff;
+}
+
+app-dashboard .metric-accent-indigo {
+  --metric-accent: #a78bfa;
+  --metric-accent-border: rgba(167, 139, 250, 0.2);
+  --metric-accent-glow: rgba(167, 139, 250, 0.12);
+  --metric-accent-soft: rgba(167, 139, 250, 0.1);
+  --metric-chart-fill: rgba(167, 139, 250, 0.1);
+  --metric-chart-line: #a78bfa;
+}
+
+app-dashboard .metric-accent-green {
+  --metric-accent: #34d399;
+  --metric-accent-border: rgba(52, 211, 153, 0.2);
+  --metric-accent-glow: rgba(52, 211, 153, 0.11);
+  --metric-accent-soft: rgba(52, 211, 153, 0.1);
+  --metric-chart-fill: rgba(52, 211, 153, 0.1);
+  --metric-chart-line: #34d399;
+}
+
+app-dashboard .metric-accent-amber {
+  --metric-accent: #fbbf24;
+  --metric-accent-border: rgba(251, 191, 36, 0.22);
+  --metric-accent-glow: rgba(251, 191, 36, 0.11);
+  --metric-accent-soft: rgba(251, 191, 36, 0.11);
+  --metric-chart-fill: rgba(251, 191, 36, 0.11);
+  --metric-chart-line: #fbbf24;
+}
+
+app-dashboard .metric-accent-teal {
+  --metric-accent: #2dd4bf;
+  --metric-accent-border: rgba(45, 212, 191, 0.2);
+  --metric-accent-glow: rgba(45, 212, 191, 0.11);
+  --metric-accent-soft: rgba(45, 212, 191, 0.1);
+  --metric-chart-fill: rgba(45, 212, 191, 0.1);
+  --metric-chart-line: #2dd4bf;
+}
+
+app-dashboard .metric-card.metric-card-enhanced .metric-card-top.metric-card-top-enhanced {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  justify-self: stretch;
+  min-height: 34px;
+  width: 100%;
+}
+
+app-dashboard .metric-pill-slot {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 1 auto;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+app-dashboard .metric-card-enhanced .metric-card-top .metric-trend {
+  background: rgba(124, 156, 255, 0.1);
+  border: 1px solid rgba(124, 156, 255, 0.2);
+  color: var(--color-primary);
+  flex: 0 1 auto;
+  max-width: 112px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+app-dashboard .metric-card-enhanced .metric-card-top .metric-trend.trend-positive {
+  background: rgba(45, 212, 191, 0.1);
+  border-color: rgba(45, 212, 191, 0.2);
+  color: #2dd4bf;
+}
+
+app-dashboard .metric-card-enhanced .metric-card-top .metric-trend.trend-neutral {
+  background: rgba(124, 156, 255, 0.1);
+  border-color: rgba(124, 156, 255, 0.2);
+  color: var(--color-primary);
+}
+
+app-dashboard .metric-card-enhanced .metric-card-top .metric-trend.trend-warning {
+  background: rgba(251, 191, 36, 0.12);
+  border-color: rgba(251, 191, 36, 0.24);
+  color: var(--color-warning);
+}
+
+app-dashboard .metric-card-enhanced .metric-card-top .metric-trend.trend-destructive {
+  background: var(--color-danger-surface);
+  border-color: rgba(248, 113, 113, 0.22);
+  color: var(--color-danger);
+}
+
+app-dashboard .metric-icon {
+  align-items: center;
+  background: var(--metric-accent-soft);
+  border: 1px solid var(--metric-accent-border);
+  border-radius: 8px;
+  color: var(--metric-accent);
+  display: inline-flex;
+  flex: 0 0 34px;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}
+
+app-dashboard .metric-icon svg {
+  fill: currentColor;
+  height: 17px;
+  width: 17px;
+}
+
+app-dashboard .metric-copy-enhanced span {
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+app-dashboard .metric-support-row {
+  align-items: center;
+  color: var(--color-soft);
+  display: flex;
+  font-size: 0.75rem;
+  gap: 8px;
+  min-width: 0;
+}
+
+app-dashboard .metric-support-row > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+app-dashboard .metric-trend.metric-trend-compact {
+  background: rgba(124, 156, 255, 0.1);
+  color: var(--color-primary);
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  min-height: 20px;
+  padding: 0 7px;
+}
+
+app-dashboard .metric-trend.metric-trend-compact.trend-positive {
+  background: rgba(52, 211, 153, 0.1);
+  color: var(--color-success);
+}
+
+app-dashboard .metric-trend.metric-trend-compact.trend-neutral {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--color-soft);
+}
+
+app-dashboard .metric-trend.metric-trend-compact.trend-warning {
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--color-warning);
+}
+
+app-dashboard .metric-trend.metric-trend-compact.trend-destructive {
+  background: var(--color-danger-surface);
+  color: var(--color-danger);
+}
+
+app-dashboard .metric-sparkline-shell {
+  cursor: crosshair;
+  height: 30px;
+  min-width: 0;
+  position: relative;
+  width: 100%;
+}
+
+app-dashboard .metric-sparkline {
+  color: var(--metric-chart-line);
+  cursor: crosshair;
+  display: block;
+  height: 30px;
+  opacity: 0.9;
+  overflow: visible;
+  width: 100%;
+}
+
+app-dashboard .metric-sparkline-hit-zone {
+  cursor: crosshair;
+}
+
+app-dashboard .metric-sparkline-area {
+  fill: var(--metric-chart-fill);
+}
+
+app-dashboard .metric-sparkline-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+  vector-effect: non-scaling-stroke;
+}
+
+app-dashboard .metric-sparkline-marker {
+  opacity: 0.34;
+  pointer-events: none;
+  stroke-dasharray: 2 2;
+  stroke-width: 1;
+  transition:
+    x1 140ms ease,
+    x2 140ms ease,
+    opacity 120ms ease;
+}
+
+app-dashboard .metric-sparkline-point {
+  pointer-events: none;
+  stroke-width: 1.5;
+  transition:
+    cx 140ms ease,
+    cy 140ms ease,
+    opacity 120ms ease;
+  vector-effect: non-scaling-stroke;
+}
+
+app-dashboard .metric-sparkline-tooltip {
+  background: rgba(10, 11, 15, 0.96);
+  border: 1px solid rgba(229, 231, 235, 0.14);
+  border-radius: 9px;
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.32),
+    0 1px 0 rgba(255, 255, 255, 0.04) inset;
+  display: grid;
+  gap: 2px;
+  min-width: 76px;
+  padding: 7px 8px;
+  pointer-events: none;
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 6px));
+  transition:
+    left 140ms ease,
+    top 140ms ease,
+    opacity 120ms ease;
+  z-index: 3;
+}
+
+app-dashboard .metric-sparkline-tooltip-title {
+  color: var(--color-text);
+  font-size: 0.66rem;
+  font-weight: 900;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+app-dashboard .metric-sparkline-tooltip-date {
+  color: var(--color-soft);
+  font-size: 0.62rem;
+  font-weight: 850;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+app-dashboard .metric-sparkline-tooltip strong {
+  color: var(--color-text);
+  font-size: 0.78rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+app-dashboard .analytics-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.75fr);
+  margin-top: 16px;
+}
+
+app-dashboard .analytics-main-stack {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+app-dashboard .analytics-card {
+  background:
+    radial-gradient(circle at 92% 12%, rgba(124, 156, 255, 0.07), transparent 14rem),
+    linear-gradient(180deg, rgba(20, 25, 34, 0.94), rgba(15, 18, 24, 0.94));
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  box-shadow: var(--dash-shadow);
+  min-width: 0;
+  padding: 20px;
+}
+
+app-dashboard .project-status-card {
+  background:
+    radial-gradient(circle at 86% 10%, rgba(124, 156, 255, 0.095), transparent 15rem),
+    radial-gradient(circle at 8% 100%, rgba(67, 56, 202, 0.06), transparent 14rem),
+    linear-gradient(150deg, rgba(22, 29, 46, 0.98), rgba(14, 18, 30, 0.96) 54%, rgba(12, 15, 24, 0.98));
+  border-color: rgba(124, 156, 255, 0.2);
+  box-shadow:
+    0 1px 0 rgba(199, 210, 254, 0.06) inset,
+    0 18px 48px rgba(0, 0, 0, 0.24),
+    0 0 36px rgba(79, 70, 229, 0.09);
+}
+
+app-dashboard .performance-overview-card {
+  align-self: start;
+  padding-bottom: 14px;
+}
+
+app-dashboard .analytics-card-header {
+  align-items: start;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+app-dashboard .analytics-card-header.compact {
+  align-items: center;
+}
+
+app-dashboard .analytics-card-header span:not(.metric-trend),
+app-dashboard .analytics-card-header strong {
+  color: var(--color-soft);
+  font-size: 0.75rem;
+  font-weight: 850;
+}
+
+app-dashboard .analytics-card-header h2 {
+  font-size: 1.05rem;
+  line-height: 1.2;
+  margin: 6px 0 0;
+}
+
+app-dashboard .analytics-card-header p,
+app-dashboard .agency-insight-card p {
+  color: var(--color-muted);
+  line-height: 1.55;
+  margin: 8px 0 0;
+}
+
+app-dashboard .analytics-trend {
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+
+app-dashboard .performance-controls {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+app-dashboard .performance-range-select {
+  appearance: none;
+  background:
+    linear-gradient(45deg, transparent 50%, #8ea0bc 50%) calc(100% - 12px) 50% / 5px 5px no-repeat,
+    linear-gradient(135deg, #8ea0bc 50%, transparent 50%) calc(100% - 8px) 50% / 5px 5px no-repeat,
+    rgba(124, 156, 255, 0.08);
+  border: 1px solid rgba(124, 156, 255, 0.18);
+  border-radius: 999px;
+  color: #c7d2fe;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 850;
+  min-height: 26px;
+  padding: 0 24px 0 10px;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+app-dashboard .performance-range-select:hover,
+app-dashboard .performance-range-select:focus-visible {
+  background-color: rgba(124, 156, 255, 0.12);
+  border-color: rgba(124, 156, 255, 0.28);
+  color: var(--color-text);
+}
+
+app-dashboard .performance-chart-shell {
+  height: 292px;
+  margin-top: 18px;
+  min-width: 0;
+  position: relative;
+}
+
+app-dashboard .performance-chart-shell canvas,
+app-dashboard .status-chart-shell canvas {
+  display: block;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+app-dashboard .chart-key {
+  align-items: center;
+  color: #8ea0bc;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.76rem;
+  font-weight: 850;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+app-dashboard .chart-key span {
+  align-items: center;
+  display: inline-flex;
+  gap: 7px;
+}
+
+app-dashboard .chart-key span:first-child {
+  color: #c7d2fe;
+}
+
+app-dashboard .chart-key span:last-child {
+  color: var(--color-muted);
+}
+
+app-dashboard .performance-summary-row {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+app-dashboard .performance-summary-item {
+  --summary-accent: var(--color-primary);
+
+  background: rgba(229, 231, 235, 0.035);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+  padding: 10px 12px;
+  position: relative;
+}
+
+app-dashboard .performance-summary-item::before {
+  background: var(--summary-accent);
+  content: '';
+  height: 2px;
+  inset: 0 0 auto;
+  opacity: 0.7;
+  position: absolute;
+}
+
+app-dashboard .performance-summary-item:nth-child(1) {
+  --summary-accent: #7c9cff;
+}
+
+app-dashboard .performance-summary-item:nth-child(2) {
+  --summary-accent: #34d399;
+}
+
+app-dashboard .performance-summary-item:nth-child(3) {
+  --summary-accent: #2dd4bf;
+}
+
+app-dashboard .performance-summary-item:nth-child(4) {
+  --summary-accent: #a78bfa;
+}
+
+app-dashboard .performance-summary-item span,
+app-dashboard .performance-summary-item small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+app-dashboard .performance-summary-item span {
+  color: var(--summary-accent);
+  font-size: 0.66rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+app-dashboard .performance-summary-item strong {
+  color: #f8fafc;
+  font-size: 1.28rem;
+  font-weight: 950;
+  line-height: 0.98;
+  margin-top: 2px;
+}
+
+app-dashboard .performance-summary-item small {
+  color: var(--color-muted);
+  font-size: 0.63rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+app-dashboard .priority-actions-card {
+  background:
+    radial-gradient(circle at 90% 8%, rgba(251, 191, 36, 0.075), transparent 14rem),
+    radial-gradient(circle at 8% 100%, rgba(180, 83, 9, 0.055), transparent 13rem),
+    linear-gradient(150deg, rgba(31, 26, 18, 0.98), rgba(21, 19, 17, 0.96) 54%, rgba(15, 18, 24, 0.98));
+  border-color: rgba(251, 191, 36, 0.18);
+  box-shadow:
+    0 1px 0 rgba(253, 230, 138, 0.055) inset,
+    0 18px 48px rgba(0, 0, 0, 0.24),
+    0 0 34px rgba(180, 83, 9, 0.08);
+  margin-top: 0;
+  padding: 18px 20px;
+}
+
+app-dashboard .priority-actions-list {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+app-dashboard .priority-action-row {
+  --priority-action-color: var(--color-primary);
+  --priority-action-border: rgba(124, 156, 255, 0.2);
+  --priority-action-surface: rgba(124, 156, 255, 0.1);
+
+  align-items: center;
+  background: rgba(229, 231, 235, 0.035);
+  border: 1px solid var(--dash-border);
+  border-radius: var(--dash-radius);
+  color: var(--color-text);
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 34px minmax(0, 1fr) max-content;
+  min-height: 64px;
+  min-width: 0;
+  padding: 10px 12px;
+  text-decoration: none;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+app-dashboard .priority-action-row:hover {
+  background: rgba(229, 231, 235, 0.055);
+  border-color: var(--priority-action-border);
+}
+
+app-dashboard .priority-action-warning {
+  --priority-action-color: var(--color-warning);
+  --priority-action-border: rgba(251, 191, 36, 0.24);
+  --priority-action-surface: rgba(251, 191, 36, 0.12);
+}
+
+app-dashboard .priority-action-destructive {
+  --priority-action-color: var(--color-danger);
+  --priority-action-border: rgba(248, 113, 113, 0.24);
+  --priority-action-surface: var(--color-danger-surface);
+}
+
+app-dashboard .priority-action-positive {
+  --priority-action-color: var(--color-success);
+  --priority-action-border: rgba(52, 211, 153, 0.22);
+  --priority-action-surface: rgba(52, 211, 153, 0.1);
+}
+
+app-dashboard .priority-action-icon {
+  align-items: center;
+  background: var(--priority-action-surface);
+  border: 1px solid var(--priority-action-border);
+  border-radius: 8px;
+  color: var(--priority-action-color);
+  display: inline-flex;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}
+
+app-dashboard .priority-action-icon svg {
+  fill: currentColor;
+  height: 17px;
+  width: 17px;
+}
+
+app-dashboard .priority-action-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+app-dashboard .priority-action-copy strong {
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+app-dashboard .priority-action-copy strong {
+  color: var(--color-text);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+app-dashboard .priority-action-copy span {
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+app-dashboard .priority-action-pill {
+  align-items: center;
+  background: var(--priority-action-surface);
+  border: 1px solid var(--priority-action-border);
+  border-radius: 999px;
+  color: var(--priority-action-color);
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 850;
+  justify-content: center;
+  justify-self: end;
+  min-height: 22px;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+app-dashboard .key-dot,
+app-dashboard .status-dot {
+  border-radius: 999px;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+app-dashboard .key-dot {
+  height: 7px;
+  width: 7px;
+}
+
+app-dashboard .key-dot-primary {
+  background: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(124, 156, 255, 0.08);
+}
+
+app-dashboard .key-dot-success {
+  background: var(--color-success);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.07);
+}
+
+app-dashboard .analytics-side-stack {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+app-dashboard .status-chart-layout {
+  align-items: center;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 168px minmax(0, 1fr);
+  margin-top: 18px;
+}
+
+app-dashboard .project-status-card .analytics-card-header h2 {
+  color: #f8fafc;
+  font-size: 1.08rem;
+  font-weight: 900;
+}
+
+app-dashboard .status-chart-shell {
+  aspect-ratio: 1;
+  min-width: 0;
+  position: relative;
+}
+
+app-dashboard .status-chart-center {
+  display: grid;
+  inset: 50% auto auto 50%;
+  justify-items: center;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+app-dashboard .status-chart-center strong {
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+app-dashboard .status-chart-center span {
+  color: var(--color-soft);
+  font-size: 0.72rem;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+app-dashboard .status-legend {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+}
+
+app-dashboard .status-legend-item {
+  --status-accent: var(--color-primary);
+
+  align-items: center;
+  color: var(--color-muted);
+  display: grid;
+  font-size: 0.78rem;
+  gap: 9px;
+  grid-template-columns: auto minmax(0, 1fr) 28px 38px;
+  padding: 2px 0;
+}
+
+app-dashboard .status-dot {
+  height: 8px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--status-accent) 12%, transparent);
+  width: 8px;
+}
+
+app-dashboard .status-legend-label {
+  color: var(--color-muted);
+  font-weight: 760;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+app-dashboard .status-legend-count {
+  color: var(--color-text);
+  font-size: 1.08rem;
+  font-weight: 950;
+  justify-self: end;
+  letter-spacing: 0;
+  line-height: 1;
+  text-align: right;
+}
+
+app-dashboard .status-legend-percent {
+  color: var(--status-accent);
+  font-size: 0.7rem;
+  font-weight: 900;
+  justify-self: end;
+  line-height: 1;
+  text-align: right;
+}
+
+@media (max-width: 1199px) {
+  app-dashboard .project-status-card .status-chart-layout {
+    align-items: start;
+    gap: 18px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  app-dashboard .project-status-card .status-chart-shell {
+    justify-self: center;
+    width: min(220px, 100%);
+  }
+
+  app-dashboard .project-status-card .status-legend {
+    gap: 10px 16px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  app-dashboard .project-status-card .status-legend-item {
+    align-items: start;
+    gap: 4px 9px;
+    grid-template-areas:
+      'dot label label'
+      '. count percent';
+    grid-template-columns: auto auto minmax(0, 1fr);
+    padding: 4px 0;
+  }
+
+  app-dashboard .project-status-card .status-dot {
+    grid-area: dot;
+    margin-top: 0.28rem;
+  }
+
+  app-dashboard .project-status-card .status-legend-label {
+    grid-area: label;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+
+  app-dashboard .project-status-card .status-legend-count {
+    grid-area: count;
+    justify-self: start;
+    text-align: left;
+  }
+
+  app-dashboard .project-status-card .status-legend-percent {
+    grid-area: percent;
+    justify-self: start;
+    text-align: left;
+  }
+}
+
+app-dashboard .agency-insight-card {
+  background:
+    radial-gradient(circle at 88% 8%, rgba(45, 212, 191, 0.085), transparent 14rem),
+    radial-gradient(circle at 8% 100%, rgba(34, 197, 94, 0.045), transparent 13rem),
+    linear-gradient(150deg, rgba(17, 31, 30, 0.98), rgba(14, 22, 22, 0.96) 54%, rgba(15, 18, 24, 0.98));
+  border-color: rgba(45, 212, 191, 0.17);
+  box-shadow:
+    0 1px 0 rgba(153, 246, 228, 0.055) inset,
+    0 18px 48px rgba(0, 0, 0, 0.24),
+    0 0 34px rgba(20, 184, 166, 0.075);
+}
+
+app-dashboard .agency-insight-card .insight-headline {
+  display: grid;
+  gap: 6px;
+  margin-top: 22px;
+}
+
+app-dashboard .agency-insight-card .insight-rate-value {
+  color: #f8fafc;
+  font-family: var(--font-display);
+  font-size: 3.15rem;
+  font-weight: 950;
+  line-height: 0.92;
+  text-shadow: 0 0 26px rgba(45, 212, 191, 0.12);
+}
+
+app-dashboard .agency-insight-card .insight-rate-label {
+  color: #99f6e4;
+  font-size: 0.82rem;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+app-dashboard .agency-insight-card > p {
+  margin-top: 12px;
+}
+
+app-dashboard .agency-insight-card .insight-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+app-dashboard .agency-insight-card .insight-item {
+  --insight-accent: var(--color-primary);
+  --insight-border: rgba(124, 156, 255, 0.18);
+  --insight-surface: rgba(124, 156, 255, 0.065);
+
+  align-items: center;
+  background:
+    radial-gradient(circle at 100% 0%, var(--insight-surface), transparent 6rem),
+    rgba(229, 231, 235, 0.035);
+  border: 1px solid var(--insight-border);
+  border-radius: var(--dash-radius);
+  display: grid;
+  gap: 4px 14px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 62px;
+  padding: 12px;
+}
+
+app-dashboard .agency-insight-card .insight-item:nth-child(1) {
+  --insight-accent: #34d399;
+  --insight-border: rgba(52, 211, 153, 0.18);
+  --insight-surface: rgba(52, 211, 153, 0.06);
+}
+
+app-dashboard .agency-insight-card .insight-item:nth-child(2) {
+  --insight-accent: #fbbf24;
+  --insight-border: rgba(251, 191, 36, 0.18);
+  --insight-surface: rgba(251, 191, 36, 0.065);
+}
+
+app-dashboard .agency-insight-card .insight-item:nth-child(3) {
+  --insight-accent: #7c9cff;
+  --insight-border: rgba(124, 156, 255, 0.18);
+  --insight-surface: rgba(124, 156, 255, 0.065);
+}
+
+app-dashboard .agency-insight-card .insight-item span {
+  color: var(--color-text);
+  font-size: 0.76rem;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+app-dashboard .agency-insight-card .insight-item strong {
+  color: var(--insight-accent);
+  font-size: 1.04rem;
+  font-weight: 950;
+  justify-self: end;
+  line-height: 1;
+  text-align: right;
+}
+
+app-dashboard .agency-insight-card .insight-item small {
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  grid-column: 1 / -1;
+  line-height: 1.25;
+}
+
+app-dashboard .insight-positive strong {
+  color: var(--color-success);
+}
+
+app-dashboard .insight-neutral strong {
+  color: var(--color-primary);
+}
+
+app-dashboard .insight-warning strong {
+  color: var(--color-warning);
+}
+
+@media (max-width: 1180px) {
+  app-dashboard .workspace-health-chart {
+    max-width: 680px;
+    width: 100%;
+  }
+
+  app-dashboard .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  app-dashboard .analytics-side-stack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1181px) and (max-width: 1226px) {
+  app-dashboard .metric-title-compact {
+    display: block;
+    max-width: 17ch;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 820px) {
+  app-dashboard .analytics-card-header,
+  app-dashboard .status-chart-layout {
+    grid-template-columns: 1fr;
+  }
+
+  app-dashboard .analytics-card-header {
+    display: grid;
+  }
+
+  app-dashboard .priority-actions-list {
+    grid-template-columns: 1fr;
+  }
+
+  app-dashboard .analytics-trend {
+    justify-self: start;
+  }
+
+  app-dashboard .performance-controls {
+    justify-content: flex-start;
+  }
+
+  app-dashboard .analytics-side-stack {
+    grid-template-columns: 1fr;
+  }
+
+  app-dashboard .status-chart-layout {
+    justify-items: start;
+  }
+}
+
+@media (max-width: 560px) {
+  app-dashboard .metric-card.metric-card-enhanced,
+  app-dashboard .analytics-card {
+    padding: 16px;
+  }
+
+  app-dashboard .performance-chart-shell {
+    height: 220px;
+  }
+
+  app-dashboard .performance-summary-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  app-dashboard .status-chart-layout {
+    gap: 14px;
   }
 }

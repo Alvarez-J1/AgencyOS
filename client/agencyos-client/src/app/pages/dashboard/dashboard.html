@@ -2,58 +2,76 @@
   <section class="dashboard-section overview-section" aria-labelledby="overview-heading">
     <header class="dashboard-hero">
       <div class="hero-copy">
-        <p class="eyebrow hero-kicker" style="color: var(--color-primary);">Overview</p>
-        <h1 id="overview-heading">Welcome back, {{ welcomeName }}</h1>
-        <p>See the latest activity across your clients, projects, and tasks.</p>
+        <p class="eyebrow hero-kicker">Overview</p>
+        <h1 id="overview-heading">
+          Welcome back, <span class="hero-accent">{{ welcomeName }}</span>
+        </h1>
+        <p>{{ overviewSubtitle }}</p>
+        <div class="hero-actions" aria-label="Dashboard actions">
+          <a class="secondary-button hero-action" routerLink="/projects">Review projects</a>
+          <a class="secondary-button hero-action" routerLink="/tasks">Open tasks</a>
+        </div>
       </div>
 
-      <aside class="task-activity-card" aria-label="Task activity">
-        <div
-          class="task-activity-summary"
-          style="align-items: start; column-gap: 16px; display: grid; grid-template-areas: 'title value' 'subtitle label' 'badge badge'; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto auto; row-gap: 0;"
-        >
-          <div class="task-activity-header" style="display: contents;">
-            <span style="grid-area: title;">Task Activity</span>
-            <p style="align-self: center; grid-area: subtitle;">Last 30 days</p>
-            <span class="metric-trend trend-positive" style="grid-area: badge; justify-self: start; margin-top: 5px;">
-              {{ taskActivityTrendBadge }}
-            </span>
+      <aside class="workspace-health-card" aria-label="Workspace health">
+        <div class="workspace-health-header">
+          <div>
+            <span>Workspace Health</span>
+            <p>Last 30 days</p>
           </div>
-
-          <div class="task-activity-kpi" style="display: contents;">
-            @if (!isLoading && !errorMessage) {
-              <strong style="grid-area: value; justify-self: end;">{{ taskActivityMetricValue }}</strong>
-              <span style="align-self: center; grid-area: label; justify-self: end;">{{ taskActivityMetricLabel }}</span>
-            } @else {
-              <strong style="grid-area: value; justify-self: end;">Live</strong>
-              <span style="align-self: center; grid-area: label; justify-self: end;">Preparing activity</span>
-            }
-          </div>
+          <span
+            class="metric-trend"
+            [class.trend-positive]="workspaceHealthStatusTone === 'positive'"
+            [class.trend-neutral]="workspaceHealthStatusTone === 'neutral'"
+            [class.trend-warning]="workspaceHealthStatusTone === 'warning'"
+            [class.trend-destructive]="workspaceHealthStatusTone === 'destructive'"
+          >
+            {{ workspaceHealthStatusLabel }}
+          </span>
         </div>
 
-        <div
-          style="align-self: start; justify-self: stretch; min-width: 0; position: relative; width: 100%;"
-          (mouseleave)="clearHoveredTaskActivityPoint()"
-        >
+        <div class="workspace-health-primary">
+          <strong>{{ workspaceCompletionRate }}%</strong>
+          <span class="workspace-health-label">Overall completion</span>
+          <span
+            class="metric-trend workspace-health-trend"
+            [class.trend-positive]="workspaceHealthTrendBadge.tone === 'positive'"
+            [class.trend-neutral]="workspaceHealthTrendBadge.tone === 'neutral'"
+            [class.trend-warning]="workspaceHealthTrendBadge.tone === 'warning'"
+            [class.trend-destructive]="workspaceHealthTrendBadge.tone === 'destructive'"
+          >
+            {{ workspaceHealthTrendBadge.text }}
+          </span>
+        </div>
+
+        <div class="workspace-health-stats" aria-label="Workspace health supporting metrics">
+          @for (stat of workspaceHealthStats; track stat.label) {
+            <div class="workspace-health-stat">
+              <span>{{ stat.label }}</span>
+              <strong>{{ stat.value }}</strong>
+            </div>
+          }
+        </div>
+
+        <div class="workspace-health-chart" (mouseleave)="clearHoveredWorkspaceHealthPoint()">
           <svg
-            style="color: var(--color-primary); display: block; height: 88px; width: 100%;"
-            viewBox="0 0 280 104"
+            viewBox="0 0 280 68"
             preserveAspectRatio="none"
             role="img"
-            aria-label="Task completion activity over the last 30 days"
+            aria-label="Workspace performance trend"
           >
             <defs>
-              <linearGradient id="taskActivityFillGradient" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stop-color="#7c9cff" stop-opacity="0.15" />
+              <linearGradient id="workspaceHealthFillGradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#7c9cff" stop-opacity="0.14" />
                 <stop offset="100%" stop-color="#7c9cff" stop-opacity="0" />
               </linearGradient>
             </defs>
 
-            @for (gridLine of taskActivityGridLines; track gridLine) {
+            @for (gridLine of workspaceHealthGridLines; track gridLine) {
               <line
                 x1="0"
                 x2="280"
-                stroke="rgba(229, 231, 235, 0.075)"
+                stroke="rgba(229, 231, 235, 0.07)"
                 stroke-width="1"
                 vector-effect="non-scaling-stroke"
                 [attr.y1]="gridLine"
@@ -61,51 +79,65 @@
               />
             }
 
-            <path fill="url(#taskActivityFillGradient)" [attr.d]="taskActivityAreaPath" />
+            <path fill="url(#workspaceHealthFillGradient)" [attr.d]="workspaceHealthAreaPath" />
             <path
-              class="task-activity-line"
+              class="workspace-health-line"
               fill="none"
               stroke="currentColor"
+              stroke-dasharray="none"
+              stroke-dashoffset="0"
               stroke-linecap="round"
               stroke-linejoin="round"
               vector-effect="non-scaling-stroke"
-              [attr.stroke-width]="hoveredTaskActivityPoint ? 2.7 : 2"
-              [attr.d]="taskActivityLinePath"
+              [attr.stroke-width]="hoveredWorkspaceHealthPoint ? 2.6 : 2"
+              [attr.d]="workspaceHealthLinePath"
             />
 
-            @for (point of taskActivityPoints; track point.index) {
+            @for (point of workspaceHealthPoints; track point.index) {
               <rect
                 y="0"
                 width="10"
-                height="104"
+                height="68"
                 fill="transparent"
                 cursor="crosshair"
                 [attr.x]="point.x - 5"
-                (mouseenter)="setHoveredTaskActivityPoint(point)"
+                (mouseenter)="setHoveredWorkspaceHealthPoint(point)"
+                (click)="setHoveredWorkspaceHealthPoint(point)"
+                (touchstart)="setHoveredWorkspaceHealthPoint(point)"
               />
             }
 
-            @if (hoveredTaskActivityPoint; as point) {
+            @if (hoveredWorkspaceHealthPoint; as point) {
               <circle
                 fill="#e5e7eb"
                 stroke="#7c9cff"
                 stroke-width="2"
-                r="4"
+                r="3.8"
                 [attr.cx]="point.x"
                 [attr.cy]="point.y"
               />
             }
           </svg>
 
-          @if (hoveredTaskActivityPoint; as point) {
+          @if (hoveredWorkspaceHealthPoint; as point) {
             <div
-              style="background: rgba(10, 11, 15, 0.94); border: 1px solid var(--dash-border-strong); border-radius: var(--dash-radius); box-shadow: var(--dash-shadow); display: grid; gap: 2px; min-width: 112px; padding: 8px; pointer-events: none; position: absolute; transform: translate(-50%, -112%);"
+              class="workspace-health-tooltip"
               [style.left.%]="point.tooltipX"
               [style.top.%]="point.tooltipY"
             >
-              <span style="color: var(--color-soft); font-size: 0.72rem; font-weight: 850;">{{ point.dateLabel }}</span>
-              <strong style="font-size: 0.78rem;">Tasks completed</strong>
-              <em style="font-size: 1.08rem; font-style: normal; font-weight: 900;">{{ point.value }}</em>
+              <span>{{ point.dateLabel }}</span>
+              <div>
+                <small>Completion</small>
+                <strong>{{ point.completionPercentage }}%</strong>
+              </div>
+              <div>
+                <small>Tasks completed</small>
+                <strong>{{ point.tasksCompleted }}</strong>
+              </div>
+              <div>
+                <small>Active projects</small>
+                <strong>{{ point.activeProjects }}</strong>
+              </div>
             </div>
           }
         </div>
@@ -115,7 +147,6 @@
     @if (isLoading) {
       <div class="state-panel" role="status" aria-live="polite" aria-busy="true">
         <h2 class="loading-indicator">Loading dashboard</h2>
-        <p>Fetching clients, projects, and tasks.</p>
       </div>
     } @else if (errorMessage) {
       <div class="state-panel state-panel-error" role="alert">
@@ -129,109 +160,344 @@
           <h2>No clients yet</h2>
           <p>Add your first client to start managing projects, tasks, and workspace activity.</p>
         </div>
-        <a class="primary-button" routerLink="/clients" [queryParams]="{ newClient: true }">Add Client</a>
+        <a class="primary-button" routerLink="/clients" [queryParams]="{ newClient: true }"
+          >Add Client</a
+        >
       </div>
     } @else {
       <section class="metric-grid" aria-label="Workspace metrics">
-        <article class="metric-card">
-          <div class="metric-card-top">
-            @if (totalClientsBadge; as badge) {
-              <span
-                class="metric-trend"
-                [class.trend-positive]="badge.tone === 'positive'"
-                [class.trend-neutral]="badge.tone === 'neutral'"
-                [class.trend-warning]="badge.tone === 'warning'"
-              >
-                {{ badge.text }}
+        @for (metric of dashboardMetrics; track metric.title) {
+          <article
+            class="metric-card metric-card-enhanced"
+            [class.metric-accent-blue]="metric.icon === 'clients'"
+            [class.metric-accent-indigo]="metric.icon === 'activeProjects'"
+            [class.metric-accent-green]="metric.icon === 'completedProjects'"
+            [class.metric-accent-amber]="metric.icon === 'pendingTasks'"
+            [class.metric-accent-teal]="metric.icon === 'completedTasks'"
+          >
+            <div class="metric-card-top metric-card-top-enhanced">
+              <span class="metric-pill-slot">
+                @if (metric.badge; as badge) {
+                  <span
+                    class="metric-trend"
+                    [class.trend-positive]="badge.tone === 'positive'"
+                    [class.trend-neutral]="badge.tone === 'neutral'"
+                    [class.trend-warning]="badge.tone === 'warning'"
+                    [class.trend-destructive]="badge.tone === 'destructive'"
+                  >
+                    {{ badge.text }}
+                  </span>
+                }
               </span>
-            }
-          </div>
-          <div class="metric-copy" style="font-weight: 800;">
-            <span>Total clients</span>
-            <strong>{{ totalClients }}</strong>
-          </div>
-          <p>{{ totalClientsCopy }}</p>
-        </article>
 
-        <article class="metric-card">
-          <div class="metric-card-top">
-            @if (activeProjectsBadge; as badge) {
-              <span
-                class="metric-trend"
-                [class.trend-positive]="badge.tone === 'positive'"
-                [class.trend-neutral]="badge.tone === 'neutral'"
-                [class.trend-warning]="badge.tone === 'warning'"
-              >
-                {{ badge.text }}
+              <span class="metric-icon" aria-hidden="true">
+                @switch (metric.icon) {
+                  @case ('clients') {
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-6 9c0-3.3 2.68-6 6-6s6 2.7 6 6H3Zm12.5-8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-.25 2c2.76 0 5 2.24 5 5h-3.1a7.7 7.7 0 0 0-2.18-4.78c.1-.14.19-.22.28-.22Z"
+                      />
+                    </svg>
+                  }
+                  @case ('activeProjects') {
+                    <svg viewBox="0 0 24 24">
+                      <path d="M4 4h7l2 2h7v14H4V4Zm3 5v2h10V9H7Zm0 4v2h7v-2H7Z" />
+                    </svg>
+                  }
+                  @case ('completedProjects') {
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M12 3 4 6.5v5.75C4 16.85 7.4 21 12 22c4.6-1 8-5.15 8-9.75V6.5L12 3Zm-1 12.2-3.1-3.1 1.4-1.4 1.7 1.7 4.7-4.7 1.4 1.4-6.1 6.1Z"
+                      />
+                    </svg>
+                  }
+                  @case ('pendingTasks') {
+                    <svg viewBox="0 0 24 24">
+                      <path d="M5 3h14v18H5V3Zm3 4v2h8V7H8Zm0 4v2h8v-2H8Zm0 4v2h5v-2H8Z" />
+                    </svg>
+                  }
+                  @case ('completedTasks') {
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Zm-1.1-6.1 6-6-1.4-1.4-4.6 4.6-2.4-2.4-1.4 1.4 3.8 3.8Z"
+                      />
+                    </svg>
+                  }
+                }
               </span>
-            }
-          </div>
-          <div class="metric-copy" style="font-weight: 800;">
-            <span>Active projects</span>
-            <strong>{{ activeProjects }}</strong>
-          </div>
-          <p>{{ activeProjectsCopy }}</p>
-        </article>
+            </div>
 
-        <article class="metric-card">
-          <div class="metric-card-top">
-            @if (completedProjectsBadge; as badge) {
-              <span
-                class="metric-trend"
-                [class.trend-positive]="badge.tone === 'positive'"
-                [class.trend-neutral]="badge.tone === 'neutral'"
-                [class.trend-warning]="badge.tone === 'warning'"
-              >
-                {{ badge.text }}
-              </span>
-            }
-          </div>
-          <div class="metric-copy" style="font-weight: 800;">
-            <span class="metric-title-compact">Completed projects</span>
-            <strong>{{ completedProjects }}</strong>
-          </div>
-          <p>{{ completedProjectsCopy }}</p>
-        </article>
+            <div class="metric-copy metric-copy-enhanced">
+              <span [class.metric-title-compact]="metric.title === 'Completed projects'">{{
+                metric.title
+              }}</span>
+              <strong>{{ metric.value }}</strong>
+            </div>
 
-        <article class="metric-card">
-          <div class="metric-card-top">
-            @if (pendingTasksBadge; as badge) {
+            <div class="metric-support-row">
               <span
-                class="metric-trend"
-                [class.trend-positive]="badge.tone === 'positive'"
-                [class.trend-neutral]="badge.tone === 'neutral'"
-                [class.trend-warning]="badge.tone === 'warning'"
+                class="metric-trend metric-trend-compact"
+                [class.trend-positive]="metric.trend.tone === 'positive'"
+                [class.trend-neutral]="metric.trend.tone === 'neutral'"
+                [class.trend-warning]="metric.trend.tone === 'warning'"
+                [class.trend-destructive]="metric.trend.tone === 'destructive'"
               >
-                {{ badge.text }}
+                {{ metric.trend.text }}
               </span>
-            }
-          </div>
-          <div class="metric-copy" style="font-weight: 800;">
-            <span>Pending tasks</span>
-            <strong>{{ pendingTasks }}</strong>
-          </div>
-          <p>{{ pendingTasksCopy }}</p>
-        </article>
+              <span>{{ metric.supportingText }}</span>
+            </div>
 
-        <article class="metric-card">
-          <div class="metric-card-top">
-            @if (completedTasksBadge; as badge) {
-              <span
-                class="metric-trend"
-                [class.trend-positive]="badge.tone === 'positive'"
-                [class.trend-neutral]="badge.tone === 'neutral'"
-                [class.trend-warning]="badge.tone === 'warning'"
+            <div
+              class="metric-sparkline-shell"
+              (mouseleave)="clearHoveredMetricSparklinePoint(metric)"
+            >
+              <svg
+                class="metric-sparkline"
+                viewBox="0 0 108 30"
+                preserveAspectRatio="none"
+                aria-hidden="true"
               >
-                {{ badge.text }}
-              </span>
-            }
-          </div>
-          <div class="metric-copy" style="font-weight: 800;">
-            <span>Completed tasks</span>
-            <strong>{{ completedTasks }}</strong>
-          </div>
-          <p>{{ completedTasksCopy }}</p>
-        </article>
+                <path
+                  class="metric-sparkline-area"
+                  [attr.d]="metric.sparklineAreaPath"
+                  [style.fill]="metric.sparklineFillColor"
+                />
+                <path
+                  class="metric-sparkline-line"
+                  [attr.d]="metric.sparklineLinePath"
+                  [style.stroke]="metric.sparklineLineColor"
+                />
+
+                @for (point of metric.sparklinePoints; track point.index) {
+                  <rect
+                    class="metric-sparkline-hit-zone"
+                    y="0"
+                    height="30"
+                    fill="transparent"
+                    [attr.x]="point.hitX"
+                    [attr.width]="point.hitWidth"
+                    (mouseenter)="setHoveredMetricSparklinePoint(metric, point)"
+                    (touchstart)="setHoveredMetricSparklinePoint(metric, point)"
+                  />
+                }
+
+                @if (getHoveredMetricSparklinePoint(metric); as point) {
+                  <line
+                    class="metric-sparkline-marker"
+                    y1="0"
+                    y2="30"
+                    vector-effect="non-scaling-stroke"
+                    [attr.x1]="point.x"
+                    [attr.x2]="point.x"
+                    [style.stroke]="metric.sparklineLineColor"
+                  />
+                  <circle
+                    class="metric-sparkline-point"
+                    r="2.8"
+                    fill="#e5e7eb"
+                    [attr.cx]="point.x"
+                    [attr.cy]="point.y"
+                    [style.stroke]="metric.sparklineLineColor"
+                  />
+                }
+              </svg>
+
+              @if (getHoveredMetricSparklinePoint(metric); as point) {
+                <div
+                  class="metric-sparkline-tooltip"
+                  [style.left.%]="point.tooltipX"
+                  [style.top.%]="point.tooltipY"
+                >
+                  <span class="metric-sparkline-tooltip-title">{{ metric.title }}</span>
+                  <span class="metric-sparkline-tooltip-date">{{ point.label }}</span>
+                  <strong>{{ point.formattedValue }}</strong>
+                </div>
+              }
+            </div>
+
+            <p>{{ metric.description }}</p>
+          </article>
+        }
+      </section>
+
+      <section class="analytics-grid" aria-label="Agency analytics overview">
+        <div class="analytics-main-stack">
+          <article class="analytics-card performance-overview-card">
+            <div class="analytics-card-header">
+              <div>
+                <span>Delivery trends</span>
+                <h2>Project Performance Overview</h2>
+                <p>Track delivery velocity and project activity trends over time.</p>
+              </div>
+              <div class="performance-controls">
+                <span
+                  class="metric-trend analytics-trend"
+                  [class.trend-positive]="performanceTrendBadge.tone === 'positive'"
+                  [class.trend-neutral]="performanceTrendBadge.tone === 'neutral'"
+                  [class.trend-warning]="performanceTrendBadge.tone === 'warning'"
+                  [class.trend-destructive]="performanceTrendBadge.tone === 'destructive'"
+                >
+                  {{ performanceTrendBadge.text }} throughput
+                </span>
+                <label class="sr-only" for="performance-range">Project performance range</label>
+                <select
+                  id="performance-range"
+                  class="performance-range-select"
+                  [value]="selectedPerformanceRange"
+                  (change)="onPerformanceRangeChange($event)"
+                >
+                  @for (option of performanceRangeOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="performance-chart-shell">
+              <canvas
+                #performanceChartCanvas
+                aria-label="Project and task activity trends"
+                role="img"
+              ></canvas>
+            </div>
+            <div class="chart-key">
+              <span><i class="key-dot key-dot-primary" aria-hidden="true"></i>Completed tasks</span>
+              <span><i class="key-dot key-dot-success" aria-hidden="true"></i>Project updates</span>
+            </div>
+            <div class="performance-summary-row" aria-label="Project performance summary">
+              @for (stat of performanceSummaryStats; track stat.label) {
+                <div class="performance-summary-item">
+                  <span>{{ stat.label }}</span>
+                  <strong>{{ stat.value }}</strong>
+                  <small>{{ stat.meta }}</small>
+                </div>
+              }
+            </div>
+          </article>
+
+          <section
+            class="analytics-card priority-actions-card"
+            aria-labelledby="priority-actions-title"
+          >
+            <div class="analytics-card-header compact">
+              <div>
+                <span>Operations queue</span>
+                <h2 id="priority-actions-title">Priority Actions</h2>
+              </div>
+            </div>
+            <div class="priority-actions-list">
+              @for (action of priorityActions; track action.title) {
+                <a
+                  class="priority-action-row"
+                  [class.priority-action-positive]="action.tone === 'positive'"
+                  [class.priority-action-neutral]="action.tone === 'neutral'"
+                  [class.priority-action-warning]="action.tone === 'warning'"
+                  [class.priority-action-destructive]="action.tone === 'destructive'"
+                  [routerLink]="action.route"
+                >
+                  <span class="priority-action-icon" aria-hidden="true">
+                    @switch (action.icon) {
+                      @case ('alert') {
+                        <svg viewBox="0 0 24 24">
+                          <path d="M12 3 2.5 20h19L12 3Zm1 13h-2v2h2v-2Zm0-7h-2v5h2V9Z" />
+                        </svg>
+                      }
+                      @case ('calendar') {
+                        <svg viewBox="0 0 24 24">
+                          <path
+                            d="M7 2h2v3h6V2h2v3h3v16H4V5h3V2Zm11 8H6v9h12v-9ZM6 7v1h12V7H6Zm3 5h3v3H9v-3Z"
+                          />
+                        </svg>
+                      }
+                      @case ('task') {
+                        <svg viewBox="0 0 24 24">
+                          <path d="M5 4h14v16H5V4Zm3 4v2h8V8H8Zm0 4v2h8v-2H8Zm0 4v2h5v-2H8Z" />
+                        </svg>
+                      }
+                      @case ('milestone') {
+                        <svg viewBox="0 0 24 24">
+                          <path
+                            d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Zm-1.1-6.1 6-6-1.4-1.4-4.6 4.6-2.4-2.4-1.4 1.4 3.8 3.8Z"
+                          />
+                        </svg>
+                      }
+                    }
+                  </span>
+                  <span class="priority-action-copy">
+                    <strong>{{ action.title }}</strong>
+                    <span>{{ action.description }}</span>
+                  </span>
+                  <span class="priority-action-pill">{{ action.badgeText }}</span>
+                </a>
+              }
+            </div>
+          </section>
+        </div>
+
+        <div class="analytics-side-stack">
+          <article class="analytics-card project-status-card">
+            <div class="analytics-card-header compact">
+              <div>
+                <span>Project overview</span>
+                <h2>Project Status</h2>
+              </div>
+            </div>
+            <div class="status-chart-layout">
+              <div class="status-chart-shell">
+                <canvas
+                  #projectStatusChartCanvas
+                  aria-label="Project status distribution"
+                  role="img"
+                ></canvas>
+                <div class="status-chart-center">
+                  <strong>{{ activeProjects }}</strong>
+                  <span>Active Projects</span>
+                </div>
+              </div>
+              <div class="status-legend">
+                @for (segment of projectStatusSegments; track segment.label) {
+                  <div class="status-legend-item" [style.--status-accent]="segment.color">
+                    <span
+                      class="status-dot"
+                      [style.background]="segment.color"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="status-legend-label">{{ segment.label }}</span>
+                    <strong class="status-legend-count">{{ segment.count }}</strong>
+                    <small class="status-legend-percent">{{ segment.percentage }}%</small>
+                  </div>
+                }
+              </div>
+            </div>
+          </article>
+
+          <article class="analytics-card agency-insight-card">
+            <div class="analytics-card-header compact">
+              <div>
+                <span>Agency pulse</span>
+                <h2>Workload Summary</h2>
+              </div>
+            </div>
+            <strong class="insight-headline" [attr.aria-label]="insightHeadline">
+              <span class="insight-rate-value">{{ taskCompletionRate }}%</span>
+              <span class="insight-rate-label">completion rate</span>
+            </strong>
+            <p>{{ insightSummary }}</p>
+            <div class="insight-list">
+              @for (insight of agencyInsights; track insight.label) {
+                <div
+                  class="insight-item"
+                  [class.insight-positive]="insight.tone === 'positive'"
+                  [class.insight-neutral]="insight.tone === 'neutral'"
+                  [class.insight-warning]="insight.tone === 'warning'"
+                >
+                  <span>{{ insight.label }}</span>
+                  <strong>{{ insight.value }}</strong>
+                  <small>{{ insight.meta }}</small>
+                </div>
+              }
+            </div>
+          </article>
+        </div>
       </section>
     }
   </section>
@@ -268,12 +534,16 @@
                     }
                     @case ('client') {
                       <svg viewBox="0 0 24 24">
-                        <path d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9c0-3.3 3.13-6 7-6s7 2.7 7 6H5Z" />
+                        <path
+                          d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9c0-3.3 3.13-6 7-6s7 2.7 7 6H5Z"
+                        />
                       </svg>
                     }
                     @case ('report') {
                       <svg viewBox="0 0 24 24">
-                        <path d="M5 3h11l3 3v15H5V3Zm10 1.8V7h2.2L15 4.8ZM8 10v2h8v-2H8Zm0 4v2h8v-2H8Z" />
+                        <path
+                          d="M5 3h11l3 3v15H5V3Zm10 1.8V7h2.2L15 4.8ZM8 10v2h8v-2H8Zm0 4v2h8v-2H8Z"
+                        />
                       </svg>
                     }
                   }
@@ -333,6 +603,5 @@
         </div>
       </article>
     </section>
-
   }
 </section>
