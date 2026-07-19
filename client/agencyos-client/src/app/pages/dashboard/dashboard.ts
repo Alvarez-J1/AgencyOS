@@ -205,9 +205,16 @@ const performanceHoverGuidePlugin: Plugin<'line'> = {
 })
 export class DashboardComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('performanceChartCanvas')
-  private performanceChartCanvas?: ElementRef<HTMLCanvasElement>;
+  set performanceChartCanvasRef(canvas: ElementRef<HTMLCanvasElement> | undefined) {
+    this.performanceChartCanvas = canvas;
+    this.scheduleAnalyticsChartsRender();
+  }
+
   @ViewChild('projectStatusChartCanvas')
-  private projectStatusChartCanvas?: ElementRef<HTMLCanvasElement>;
+  set projectStatusChartCanvasRef(canvas: ElementRef<HTMLCanvasElement> | undefined) {
+    this.projectStatusChartCanvas = canvas;
+    this.scheduleAnalyticsChartsRender();
+  }
 
   private readonly authService = inject(AuthService);
   private readonly clientService = inject(ClientService);
@@ -241,7 +248,12 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnInit {
   private performanceChart: Chart | null = null;
   private projectStatusChart: Chart | null = null;
   private chartRenderTimer: number | null = null;
+  private chartRenderFrame: number | null = null;
+  private chartRenderAttempts = 0;
   private hasApiError = false;
+  private readonly maxChartRenderAttempts = 8;
+  private performanceChartCanvas?: ElementRef<HTMLCanvasElement>;
+  private projectStatusChartCanvas?: ElementRef<HTMLCanvasElement>;
 
   readonly welcomeName = this.currentUser?.name.trim().split(/\s+/)[0] ?? 'there';
   readonly workspaceHealthGridLines = [17, 34, 51];
@@ -269,6 +281,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnInit {
           ? 'Home data could not be loaded. Check that you are logged in and the backend is running.'
           : '';
         this.isLoading = false;
+        this.chartRenderAttempts = 0;
         this.scheduleAnalyticsChartsRender();
       },
       error: () => {
@@ -285,6 +298,10 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnInit {
   ngOnDestroy(): void {
     if (this.chartRenderTimer !== null) {
       window.clearTimeout(this.chartRenderTimer);
+    }
+
+    if (this.chartRenderFrame !== null) {
+      window.cancelAnimationFrame(this.chartRenderFrame);
     }
 
     this.performanceChart?.destroy();
@@ -925,10 +942,14 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnInit {
     }
 
     this.selectedPerformanceRange = value;
-    this.renderPerformanceChart();
+    this.chartRenderAttempts = 0;
+
+    if (!this.renderPerformanceChart()) {
+      this.scheduleAnalyticsChartsRender(80);
+    }
   }
 
-  private scheduleAnalyticsChartsRender(): void {
+  private scheduleAnalyticsChartsRender(delayMs = 0): void {
     if (typeof window === 'undefined' || this.isLoading || this.errorMessage || this.hasNoClients) {
       return;
     }
@@ -937,23 +958,43 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnInit {
       window.clearTimeout(this.chartRenderTimer);
     }
 
+    if (this.chartRenderFrame !== null) {
+      window.cancelAnimationFrame(this.chartRenderFrame);
+      this.chartRenderFrame = null;
+    }
+
     this.chartRenderTimer = window.setTimeout(() => {
       this.chartRenderTimer = null;
-      this.renderAnalyticsCharts();
-    }, 0);
+
+      this.chartRenderFrame = window.requestAnimationFrame(() => {
+        this.chartRenderFrame = null;
+
+        if (this.renderAnalyticsCharts()) {
+          this.chartRenderAttempts = 0;
+          return;
+        }
+
+        if (this.chartRenderAttempts < this.maxChartRenderAttempts) {
+          this.chartRenderAttempts += 1;
+          this.scheduleAnalyticsChartsRender(80);
+        }
+      });
+    }, delayMs);
   }
 
-  private renderAnalyticsCharts(): void {
-    this.renderPerformanceChart();
-    this.renderProjectStatusChart();
+  private renderAnalyticsCharts(): boolean {
+    const performanceRendered = this.renderPerformanceChart();
+    const projectStatusRendered = this.renderProjectStatusChart();
+
+    return performanceRendered && projectStatusRendered;
   }
 
-  private renderPerformanceChart(): void {
+  private renderPerformanceChart(): boolean {
     const canvas = this.performanceChartCanvas?.nativeElement;
-    const context = canvas?.getContext('2d');
+    const context = this.getRenderableChartContext(canvas);
 
     if (!canvas || !context) {
-      return;
+      return false;
     }
 
     const series = this.getPerformanceSeries();
@@ -975,7 +1016,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnInit {
       this.performanceChart.data.datasets[1].data = series.projectUpdates;
       this.performanceChart.data.datasets[1].backgroundColor = projectUpdatesGradient;
       this.performanceChart.update();
-      return;
+      return true;
     }
 
     this.performanceChart = new Chart(context, {
@@ -1110,14 +1151,16 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnInit {
         },
       },
     });
+
+    return true;
   }
 
-  private renderProjectStatusChart(): void {
+  private renderProjectStatusChart(): boolean {
     const canvas = this.projectStatusChartCanvas?.nativeElement;
-    const context = canvas?.getContext('2d');
+    const context = this.getRenderableChartContext(canvas);
 
     if (!context) {
-      return;
+      return false;
     }
 
     const segments = this.projectStatusSegments;
@@ -1162,6 +1205,24 @@ export class DashboardComponent implements AfterViewInit, OnDestroy, OnInit {
         responsive: true,
       },
     });
+
+    return true;
+  }
+
+  private getRenderableChartContext(
+    canvas?: HTMLCanvasElement,
+  ): CanvasRenderingContext2D | null {
+    if (!canvas) {
+      return null;
+    }
+
+    const bounds = canvas.getBoundingClientRect();
+
+    if (bounds.width < 1 || bounds.height < 1) {
+      return null;
+    }
+
+    return canvas.getContext('2d');
   }
 
   private getPerformanceSeries(): {

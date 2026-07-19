@@ -98,12 +98,58 @@
   color: var(--color-muted);
 }
 
-.compact-state {
-  padding: 16px;
+.settings-actions {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  min-height: 44px;
+  overflow: visible;
 }
 
-.settings-save-button {
+.settings-save-button.primary-button {
+  flex: 0 0 auto;
   justify-self: start;
+  line-height: 1;
+  min-width: 0;
+  overflow: visible;
+  transform: none;
+  white-space: nowrap;
+  width: 176px;
+}
+
+.settings-save-button.primary-button:hover,
+.settings-save-button.primary-button:active,
+.settings-save-button.primary-button:disabled {
+  box-shadow: none;
+  transform: none !important;
+}
+
+.settings-save-message {
+  flex: 0 1 auto;
+  color: var(--color-success);
+  font-weight: 800;
+  line-height: 1.35;
+  margin: 0;
+  min-height: 1.35em;
+  min-width: 220px;
+  opacity: 0;
+  transform: translateY(2px);
+  transition:
+    color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease,
+    visibility 160ms ease;
+  visibility: hidden;
+}
+
+.settings-save-message.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.settings-save-message.is-error {
+  color: var(--color-danger);
 }
 
 @media (max-width: 900px) {
@@ -113,6 +159,12 @@
 }
 
 @media (max-width: 560px) {
+  .settings-actions {
+    align-items: stretch;
+    display: grid;
+    gap: 10px;
+  }
+
   .settings-save-button {
     justify-self: stretch;
   }

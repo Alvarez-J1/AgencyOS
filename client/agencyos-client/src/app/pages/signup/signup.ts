@@ -1,6 +1,5 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LucideInfo } from '@lucide/angular';
 import { Router, RouterLink } from '@angular/router';
 
 import { PreviewTiltDirective } from '../../directives/preview-tilt.directive';
@@ -8,13 +7,11 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
-  imports: [FormsModule, RouterLink, PreviewTiltDirective, LucideInfo],
+  imports: [FormsModule, RouterLink, PreviewTiltDirective],
   templateUrl: './signup.html',
   styleUrls: ['../auth.scss', '../login/login.scss']
 })
-export class SignupComponent implements OnInit, OnDestroy {
-  private static readonly DEMO_NOTICE_DELAY_MS = 7000;
-  private demoNoticeTimer: ReturnType<typeof setTimeout> | null = null;
+export class SignupComponent implements OnInit {
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router
@@ -29,18 +26,12 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   submitted = false;
   isLoading = false;
-  isDemoLoading = false;
-  showDemoNotice = false;
   showPassword = false;
   errorMessage = '';
   passwordPlaceholder = 'Enter your password';
 
   ngOnInit(): void {
     this.updatePasswordPlaceholder();
-  }
-
-  ngOnDestroy(): void {
-    this.clearDemoNoticeTimer();
   }
 
   get nameInvalid(): boolean {
@@ -96,44 +87,5 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.errorMessage = error.error?.message || 'Signup failed. Please try again.';
       }
     });
-  }
-
-  continueWithDemo(): void {
-    if (this.isLoading || this.isDemoLoading) {
-      return;
-    }
-
-    this.errorMessage = '';
-    this.isDemoLoading = true;
-    this.showDemoNotice = false;
-
-    // Only surface the free-tier "waking up" notice if the request is unusually slow.
-    this.demoNoticeTimer = setTimeout(() => {
-      if (this.isDemoLoading) {
-        this.showDemoNotice = true;
-      }
-    }, SignupComponent.DEMO_NOTICE_DELAY_MS);
-
-    this.authService.demoLogin().subscribe({
-      next: () => {
-        this.clearDemoNoticeTimer();
-        this.isDemoLoading = false;
-        this.showDemoNotice = false;
-        this.router.navigateByUrl('/dashboard');
-      },
-      error: (error) => {
-        this.clearDemoNoticeTimer();
-        this.isDemoLoading = false;
-        this.showDemoNotice = false;
-        this.errorMessage = error.error?.message || 'Unable to start the demo right now. Please try again.';
-      }
-    });
-  }
-
-  private clearDemoNoticeTimer(): void {
-    if (this.demoNoticeTimer !== null) {
-      clearTimeout(this.demoNoticeTimer);
-      this.demoNoticeTimer = null;
-    }
   }
 }

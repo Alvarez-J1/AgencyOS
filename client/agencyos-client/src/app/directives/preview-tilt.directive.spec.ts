@@ -81,7 +81,7 @@ describe('PreviewTiltDirective', () => {
     vi.restoreAllMocks();
   });
 
-  it('tilts toward each touched corner and returns to rest on release', () => {
+  it('tilts toward each touched corner and holds the pose on release', () => {
     const cases = [
       { clientX: 0, clientY: 0, rotateXSign: 1, rotateYSign: -1 },
       { clientX: 200, clientY: 0, rotateXSign: 1, rotateYSign: 1 },
@@ -91,6 +91,7 @@ describe('PreviewTiltDirective', () => {
 
     for (const testCase of cases) {
       preview.dispatchEvent(createPointerEvent('pointerdown', testCase));
+      flushAnimationFrames();
 
       expect(preview.classList.contains('preview-active')).toBe(true);
       expect(preview.setPointerCapture).toHaveBeenCalledWith(1);
@@ -100,10 +101,28 @@ describe('PreviewTiltDirective', () => {
       preview.dispatchEvent(createPointerEvent('pointerup', testCase));
       flushAnimationFrames();
 
-      expect(preview.classList.contains('preview-active')).toBe(false);
-      expect(Math.abs(readRotation('--preview-rotate-x'))).toBeLessThan(0.05);
-      expect(Math.abs(readRotation('--preview-rotate-y'))).toBeLessThan(0.05);
+      expect(preview.classList.contains('preview-active')).toBe(true);
+      expect(preview.releasePointerCapture).toHaveBeenCalledWith(1);
+      expect(readRotation('--preview-rotate-x') * testCase.rotateXSign).toBeGreaterThan(6.5);
+      expect(readRotation('--preview-rotate-y') * testCase.rotateYSign).toBeGreaterThan(6.5);
     }
+  });
+
+  it('moves the held touch pose when another part of the preview is tapped', () => {
+    preview.dispatchEvent(createPointerEvent('pointerdown', { clientX: 0, clientY: 0 }));
+    preview.dispatchEvent(createPointerEvent('pointerup', { clientX: 0, clientY: 0 }));
+    flushAnimationFrames();
+
+    expect(readRotation('--preview-rotate-x')).toBeGreaterThan(6.5);
+    expect(readRotation('--preview-rotate-y')).toBeLessThan(-6.5);
+
+    preview.dispatchEvent(createPointerEvent('pointerdown', { clientX: 200, clientY: 100 }));
+    preview.dispatchEvent(createPointerEvent('pointerup', { clientX: 200, clientY: 100 }));
+    flushAnimationFrames();
+
+    expect(preview.classList.contains('preview-active')).toBe(true);
+    expect(readRotation('--preview-rotate-x')).toBeLessThan(-6.5);
+    expect(readRotation('--preview-rotate-y')).toBeGreaterThan(6.5);
   });
 
   it('updates the tilt while an active touch pointer moves', () => {

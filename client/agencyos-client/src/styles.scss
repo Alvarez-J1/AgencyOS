@@ -674,6 +674,86 @@ button:disabled {
   }
 }
 
+@media (min-width: 861px) and (max-width: 1245px) {
+  :is(app-login, app-signup) .login-shell.login-shell {
+    gap: clamp(24px, 3vw, 36px);
+    grid-template-columns: minmax(0, 1.22fr) minmax(320px, 390px);
+    padding: 30px clamp(32px, 5vw, 64px) 36px;
+  }
+
+  :is(app-login, app-signup) .product-preview.product-preview {
+    width: min(100%, 680px);
+  }
+
+  :is(app-login, app-signup) .login-card.login-card {
+    --auth-card-gap: 18px;
+    --auth-card-padding: 24px;
+    --auth-card-width: 390px;
+    --auth-demo-min-height: 108px;
+    --auth-demo-padding: 16px 18px;
+    --auth-form-gap: 14px;
+    --auth-input-padding: 7px 14px;
+
+    justify-self: end;
+    margin-top: 30px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  :is(app-login, app-signup) .login-shell.login-shell {
+    gap: 24px;
+    grid-template-columns: 1fr;
+    overflow: visible;
+    padding: 24px clamp(24px, 5vw, 48px) 44px;
+  }
+
+  :is(app-login, app-signup) .login-copy-panel.login-copy-panel {
+    display: contents;
+  }
+
+  :is(app-login, app-signup) .brand-link-logo.brand-link-logo {
+    order: 1;
+  }
+
+  :is(app-login, app-signup) .login-hero-copy.login-hero-copy {
+    order: 2;
+  }
+
+  :is(app-login, app-signup) .login-card.login-card {
+    --auth-card-width: 640px;
+
+    justify-self: center;
+    margin-top: 0;
+    order: 3;
+    width: min(100%, var(--auth-card-width));
+  }
+
+  :is(app-login, app-signup) .product-preview.product-preview {
+    justify-self: center;
+    margin-inline: auto;
+    max-height: none;
+    order: 4;
+    width: min(100%, 680px);
+  }
+
+  :is(app-login, app-signup) .product-preview-inner.product-preview-inner,
+  :is(app-login, app-signup) .product-preview-media.product-preview-media {
+    max-height: none;
+  }
+
+  :is(app-login, app-signup) .product-preview-media.product-preview-media {
+    height: auto;
+    overflow: visible;
+  }
+
+  :is(app-login, app-signup) .product-preview-media.product-preview-media img {
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+    width: 100%;
+  }
+}
+
 /* Dashboard overview analytics */
 app-dashboard .hero-actions {
   align-items: center;

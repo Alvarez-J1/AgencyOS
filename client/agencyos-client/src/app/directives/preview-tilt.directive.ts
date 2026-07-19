@@ -90,7 +90,9 @@ export class PreviewTiltDirective implements OnDestroy {
     this.preventNativeTouchGesture(event);
     this.releasePointer(event.pointerId);
     this.activeTouchPointerId = null;
-    this.resetPreview();
+    this.state.targetHover = 1;
+    this.elementRef.nativeElement.classList.add('preview-active');
+    this.startAnimation();
   }
 
   @HostListener('pointerleave', ['$event'])

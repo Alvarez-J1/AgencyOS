@@ -52,9 +52,8 @@
     <div class="product-preview" appPreviewTilt aria-hidden="true">
       <div class="product-preview-inner">
         <picture class="product-preview-media">
-          <source media="(max-width: 639px)" srcset="agencyos-dashboard-preview-mobile.png" />
-          <source media="(max-width: 1023px)" srcset="agencyos-dashboard-preview-tablet.png" />
-          <img src="agencyos-dashboard-preview.png" alt="" />
+          <source media="(max-width: 767px)" srcset="agencyos-auth-preview-mobile.png" />
+          <img src="agencyos-login-preview.png" alt="" />
         </picture>
       </div>
     </div>
@@ -140,34 +139,12 @@
       <button
         class="primary-button auth-submit-button"
         type="submit"
-        [disabled]="isLoading || isDemoLoading"
+        [disabled]="isLoading"
         [attr.aria-busy]="isLoading"
       >
         {{ isLoading ? 'Creating...' : 'Create account' }}
       </button>
     </form>
-
-    <div class="demo-access">
-      <button
-        type="button"
-        class="secondary-button demo-button"
-        (click)="continueWithDemo()"
-        [disabled]="isLoading || isDemoLoading"
-        [attr.aria-busy]="isDemoLoading"
-      >
-        {{ isDemoLoading ? 'Starting demo...' : 'View Demo' }}
-      </button>
-      @if (showDemoNotice) {
-        <div class="demo-notice" role="note">
-          <svg lucideInfo class="demo-notice-icon" aria-hidden="true"></svg>
-          <p>
-            Demo server is hosted on the free tier. The first request may take 30–60 seconds while the server wakes up
-            after inactivity. Please click "View Demo" again if needed.
-          </p>
-        </div>
-      }
-      <p class="demo-helper">Skip sign up and explore the app with preloaded demo data.</p>
-    </div>
 
     <p class="auth-switch">
       Already have an account?
