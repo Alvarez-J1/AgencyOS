@@ -1,7 +1,7 @@
 # AgencyOS — Agency Management Platform
 AgencyOS is a full-stack agency management platform that helps teams manage clients, projects, and tasks from a single workspace. It features secure authentication, responsive dashboards, and complete CRUD functionality powered by a Node.js, Express, and MongoDB backend.
 
-<img width="1520" height="727" alt="image" src="https://github.com/user-attachments/assets/364fd74e-e309-4301-b549-e8909292bc56" />
+<img width="1515" height="727" alt="image" src="https://github.com/user-attachments/assets/f3e93449-212a-49da-8b2d-4ea145a5dbb0" />
 
 
 ## Live Demo
