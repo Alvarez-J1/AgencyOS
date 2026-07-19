@@ -55,6 +55,59 @@
   transition: background 160ms ease;
 }
 
+.tasks-row:not(.tasks-row-header) {
+  --card-accent: #7c9cff;
+  --card-accent-border: rgba(124, 156, 255, 0.18);
+  --card-accent-border-hover: rgba(124, 156, 255, 0.38);
+  --card-accent-glow: rgba(124, 156, 255, 0.06);
+  --card-accent-glow-hover: rgba(124, 156, 255, 0.13);
+  --card-accent-surface: rgba(124, 156, 255, 0.055);
+
+  background:
+    radial-gradient(circle at 100% 0%, var(--card-accent-surface), transparent 10rem),
+    linear-gradient(180deg, rgba(20, 25, 34, 0.98), rgba(17, 22, 31, 0.96));
+  border-color: var(--card-accent-border);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.035) inset,
+    0 16px 40px rgba(0, 0, 0, 0.2),
+    0 0 24px var(--card-accent-glow);
+  overflow: hidden;
+  position: relative;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.tasks-row:not(.tasks-row-header):nth-child(3n) {
+  --card-accent: #a78bfa;
+  --card-accent-border: rgba(167, 139, 250, 0.18);
+  --card-accent-border-hover: rgba(167, 139, 250, 0.38);
+  --card-accent-glow: rgba(167, 139, 250, 0.06);
+  --card-accent-glow-hover: rgba(167, 139, 250, 0.13);
+  --card-accent-surface: rgba(167, 139, 250, 0.055);
+}
+
+.tasks-row:not(.tasks-row-header):nth-child(3n + 1) {
+  --card-accent: #2dd4bf;
+  --card-accent-border: rgba(45, 212, 191, 0.17);
+  --card-accent-border-hover: rgba(45, 212, 191, 0.36);
+  --card-accent-glow: rgba(45, 212, 191, 0.055);
+  --card-accent-glow-hover: rgba(45, 212, 191, 0.12);
+  --card-accent-surface: rgba(45, 212, 191, 0.05);
+}
+
+.tasks-row:not(.tasks-row-header)::before {
+  background: linear-gradient(90deg, transparent, var(--card-accent), transparent);
+  content: '';
+  height: 1px;
+  inset: 0 14px auto;
+  opacity: 0.52;
+  pointer-events: none;
+  position: absolute;
+}
+
 .task-identity {
   display: grid;
   gap: 2px;
@@ -116,7 +169,15 @@
 }
 
 .tasks-row:not(.tasks-row-header):hover {
-  background: rgba(229, 231, 235, 0.035);
+  background:
+    radial-gradient(circle at 100% 0%, var(--card-accent-surface), transparent 9rem),
+    linear-gradient(180deg, rgba(23, 29, 40, 0.98), rgba(18, 24, 34, 0.96));
+  border-color: var(--card-accent-border-hover);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.045) inset,
+    0 20px 48px rgba(0, 0, 0, 0.26),
+    0 0 32px var(--card-accent-glow-hover);
+  transform: translateY(-1px);
 }
 
 .badge {

@@ -57,9 +57,9 @@
     <div class="product-preview" appPreviewTilt aria-hidden="true">
       <div class="product-preview-inner">
         <picture class="product-preview-media">
-          <source media="(max-width: 639px)" srcset="agencyos-dashboard-preview-mobile.png" />
-          <source media="(max-width: 1023px)" srcset="agencyos-dashboard-preview-tablet.png" />
-          <img src="agencyos-dashboard-preview.png" alt="" />
+          <source media="(max-width: 639px)" srcset="agencyos-login-preview.png" />
+          <source media="(max-width: 1023px)" srcset="agencyos-login-preview.png" />
+          <img src="agencyos-login-preview.png" alt="" />
         </picture>
       </div>
     </div>
@@ -75,6 +75,33 @@
     @if (errorMessage) {
       <div class="form-alert" role="alert">{{ errorMessage }}</div>
     }
+
+    <div class="demo-access">
+      <button
+        type="button"
+        class="demo-cta"
+        (click)="continueWithDemo()"
+        [disabled]="isLoading || isDemoLoading"
+        [attr.aria-busy]="isDemoLoading"
+      >
+        <span class="demo-cta-eyebrow">EXPLORE DEMO WORKSPACE</span>
+        <span class="demo-cta-title">{{ isDemoLoading ? 'Starting demo...' : 'View Demo' }}</span>
+        <span class="demo-cta-copy">Experience the full platform with sample clients, projects, and tasks.</span>
+      </button>
+      @if (showDemoNotice) {
+        <div class="demo-notice" role="note">
+          <svg lucideInfo class="demo-notice-icon" aria-hidden="true"></svg>
+          <p>
+            The backend is hosted on Render's free tier. The first request may take 30-60 seconds
+            while the server wakes up after inactivity. Please wait for the server to wake up.
+          </p>
+        </div>
+      }
+    </div>
+
+    <div class="auth-divider" role="separator" aria-label="or sign in">
+      <span>or sign in</span>
+    </div>
 
     <form class="auth-form-modern" (ngSubmit)="submit()">
       <label>
@@ -121,28 +148,6 @@
         {{ isLoading ? 'Checking...' : 'Sign in' }}
       </button>
     </form>
-
-    <div class="demo-access">
-      <button
-        type="button"
-        class="secondary-button demo-button"
-        (click)="continueWithDemo()"
-        [disabled]="isLoading || isDemoLoading"
-        [attr.aria-busy]="isDemoLoading"
-      >
-        {{ isDemoLoading ? 'Starting demo...' : 'View Demo' }}
-      </button>
-      @if (showDemoNotice) {
-        <div class="demo-notice" role="note">
-          <svg lucideInfo class="demo-notice-icon" aria-hidden="true"></svg>
-          <p>
-            The backend is hosted on Render's free tier. The first request may take 30–60 seconds
-            while the server wakes up after inactivity. Please wait for the server to wake up.
-          </p>
-        </div>
-      }
-      <p class="demo-helper">Skip sign in and explore the app with preloaded demo data.</p>
-    </div>
 
     <p class="auth-switch">
       New to AgencyOS?
