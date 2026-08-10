@@ -97,13 +97,14 @@
         role="dialog"
         aria-modal="true"
         aria-labelledby="edit-task-title"
+        aria-describedby="edit-task-description"
         (click)="$event.stopPropagation()"
       >
         <div class="modal-header">
           <div>
             <p class="eyebrow">Edit record</p>
             <h2 id="edit-task-title">Edit task</h2>
-            <p>Update this task's details, priority, status, and due date.</p>
+            <p id="edit-task-description">Update this task's details, priority, status, and due date.</p>
           </div>
 
           <button class="icon-button" type="button" aria-label="Close edit task form" (click)="closeEditModal()">
