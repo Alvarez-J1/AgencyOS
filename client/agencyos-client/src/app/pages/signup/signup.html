@@ -71,18 +71,20 @@
     }
 
     <form class="auth-form-modern" (ngSubmit)="submit()">
-      <label>
+      <label for="signup-name">
         Name
         <input
+          id="signup-name"
           name="name"
           type="text"
           placeholder="Your name"
           [(ngModel)]="form.name"
           [class.input-error]="nameInvalid"
           [attr.aria-invalid]="nameInvalid"
+          [attr.aria-describedby]="nameInvalid ? 'signup-name-error' : null"
         />
         @if (nameInvalid) {
-          <span class="field-error">Name should be at least 2 characters.</span>
+          <span id="signup-name-error" class="field-error">Name should be at least 2 characters.</span>
         }
       </label>
 
