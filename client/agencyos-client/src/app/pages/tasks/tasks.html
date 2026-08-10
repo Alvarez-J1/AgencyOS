@@ -16,13 +16,14 @@
         role="dialog"
         aria-modal="true"
         aria-labelledby="new-task-title"
+        aria-describedby="new-task-description"
         (click)="$event.stopPropagation()"
       >
         <div class="modal-header">
           <div>
             <p class="eyebrow">New record</p>
             <h2 id="new-task-title">New task</h2>
-            <p>Create and organize tasks to keep projects on track.</p>
+            <p id="new-task-description">Create and organize tasks to keep projects on track.</p>
           </div>
 
           <button class="icon-button" type="button" aria-label="Close new task form" (click)="closeCreateModal()">
