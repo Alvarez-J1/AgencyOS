@@ -38,33 +38,33 @@
         }
 
         <form class="create-form" (ngSubmit)="createProject()">
-          <label>
+          <label for="new-project-name">
             Project name
-            <input type="text" name="project-name" [(ngModel)]="newProject.name" />
+            <input id="new-project-name" type="text" name="project-name" [(ngModel)]="newProject.name" />
           </label>
 
-          <label>
+          <label for="new-project-client">
             Client
-            <input type="text" name="project-client" [(ngModel)]="newProject.client" />
+            <input id="new-project-client" type="text" name="project-client" [(ngModel)]="newProject.client" />
           </label>
 
-          <label>
+          <label for="new-project-status">
             Status
-            <select name="project-status" [(ngModel)]="newProject.status">
+            <select id="new-project-status" name="project-status" [(ngModel)]="newProject.status">
               @for (status of createStatusOptions; track status) {
                 <option [value]="status">{{ status }}</option>
               }
             </select>
           </label>
 
-          <label>
+          <label for="new-project-due-date">
             Due date
-            <input type="date" name="project-due-date" [(ngModel)]="newProject.dueDate" />
+            <input id="new-project-due-date" type="date" name="project-due-date" [(ngModel)]="newProject.dueDate" />
           </label>
 
-          <label class="full-field">
+          <label class="full-field" for="new-project-notes">
             Description/notes
-            <textarea name="project-notes" rows="4" [(ngModel)]="newProject.notes"></textarea>
+            <textarea id="new-project-notes" name="project-notes" rows="4" [(ngModel)]="newProject.notes"></textarea>
           </label>
 
           <div class="modal-actions">
