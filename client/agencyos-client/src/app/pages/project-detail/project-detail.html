@@ -39,38 +39,38 @@
         </div>
 
         <div class="edit-grid">
-          <label>
+          <label for="edit-project-name">
             Project name
-            <input type="text" name="project-name" [(ngModel)]="editProject.name" />
+            <input id="edit-project-name" type="text" name="project-name" [(ngModel)]="editProject.name" />
           </label>
 
-          <label>
+          <label for="edit-project-client">
             Client
-            <input type="text" name="project-client" [(ngModel)]="editProject.client" />
+            <input id="edit-project-client" type="text" name="project-client" [(ngModel)]="editProject.client" />
           </label>
 
-          <label>
+          <label for="edit-project-status">
             Status
-            <select name="project-status" [(ngModel)]="editProject.status">
+            <select id="edit-project-status" name="project-status" [(ngModel)]="editProject.status">
               @for (status of statusOptions; track status) {
                 <option [value]="status">{{ status }}</option>
               }
             </select>
           </label>
 
-          <label>
+          <label for="edit-project-due-date">
             Due date
-            <input type="date" name="project-due-date" [(ngModel)]="editProject.dueDate" />
+            <input id="edit-project-due-date" type="date" name="project-due-date" [(ngModel)]="editProject.dueDate" />
           </label>
 
-          <label>
+          <label for="edit-project-progress">
             Progress
-            <input type="number" min="0" max="100" name="project-progress" [(ngModel)]="editProject.progress" />
+            <input id="edit-project-progress" type="number" min="0" max="100" name="project-progress" [(ngModel)]="editProject.progress" />
           </label>
 
-          <label class="full-field">
+          <label class="full-field" for="edit-project-notes">
             Project notes
-            <textarea name="project-notes" rows="4" [(ngModel)]="editProject.notes"></textarea>
+            <textarea id="edit-project-notes" name="project-notes" rows="4" [(ngModel)]="editProject.notes"></textarea>
           </label>
         </div>
 
