@@ -158,7 +158,12 @@
           </dl>
 
           <div class="project-actions">
-            <a class="view-button" [routerLink]="['/projects', getProjectRouteId(project)]">View</a>
+            <a
+              class="view-button"
+              [routerLink]="['/projects', getProjectRouteId(project)]"
+              [attr.aria-label]="'View ' + project.name + ' details'"
+              >View</a
+            >
           </div>
         </div>
       }
