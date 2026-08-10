@@ -16,13 +16,16 @@
         role="dialog"
         aria-modal="true"
         aria-labelledby="new-project-title"
+        aria-describedby="new-project-description"
         (click)="$event.stopPropagation()"
       >
         <div class="modal-header">
           <div>
             <p class="eyebrow">New record</p>
             <h2 id="new-project-title">New project</h2>
-            <p>Create a project to manage client work, deadlines, tasks, and project status.</p>
+            <p id="new-project-description">
+              Create a project to manage client work, deadlines, tasks, and project status.
+            </p>
           </div>
 
           <button class="icon-button" type="button" aria-label="Close new project form" (click)="closeCreateModal()">
