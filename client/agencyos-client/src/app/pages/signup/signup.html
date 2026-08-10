@@ -88,18 +88,20 @@
         }
       </label>
 
-      <label>
+      <label for="signup-email">
         Email
         <input
+          id="signup-email"
           name="email"
           type="email"
           placeholder="you@example.com"
           [(ngModel)]="form.email"
           [class.input-error]="emailInvalid"
           [attr.aria-invalid]="emailInvalid"
+          [attr.aria-describedby]="emailInvalid ? 'signup-email-error' : null"
         />
         @if (emailInvalid) {
-          <span class="field-error">Enter a valid email address.</span>
+          <span id="signup-email-error" class="field-error">Enter a valid email address.</span>
         }
       </label>
 
