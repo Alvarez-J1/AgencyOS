@@ -79,9 +79,10 @@
 
           <div class="preference-list">
             @for (preference of notificationPreferences; track preference.key) {
-              <label class="toggle-row">
+              <label class="toggle-row" [attr.for]="'settings-notification-' + preference.key">
                 <span>{{ preference.label }}</span>
                 <input
+                  [id]="'settings-notification-' + preference.key"
                   type="checkbox"
                   [name]="preference.key"
                   [(ngModel)]="settings.notifications[preference.key]"
