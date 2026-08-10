@@ -23,24 +23,24 @@
       }
 
       <div class="client-form-grid">
-        <label>
+        <label for="new-client-name">
           Client name
-          <input type="text" name="name" [(ngModel)]="newClient.name" />
+          <input id="new-client-name" type="text" name="name" [(ngModel)]="newClient.name" />
         </label>
 
-        <label>
+        <label for="new-client-company">
           Company
-          <input type="text" name="company" [(ngModel)]="newClient.company" />
+          <input id="new-client-company" type="text" name="company" [(ngModel)]="newClient.company" />
         </label>
 
-        <label>
+        <label for="new-client-email">
           Email
-          <input type="email" name="email" [(ngModel)]="newClient.email" />
+          <input id="new-client-email" type="email" name="email" [(ngModel)]="newClient.email" />
         </label>
 
-        <label>
+        <label for="new-client-status">
           Status
-          <select name="status" [(ngModel)]="newClient.status">
+          <select id="new-client-status" name="status" [(ngModel)]="newClient.status">
             <option value="Active">Active</option>
             <option value="Onboarding">Onboarding</option>
             <option value="Paused">Paused</option>
