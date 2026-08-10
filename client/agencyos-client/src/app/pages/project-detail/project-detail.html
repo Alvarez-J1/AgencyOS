@@ -13,7 +13,14 @@
 
       <div class="project-actions">
         @if (!isEditing) {
-          <button class="back-button" type="button" (click)="startEditing()">Edit Project</button>
+          <button
+            class="back-button"
+            type="button"
+            [attr.aria-label]="'Edit ' + selectedProject.name"
+            (click)="startEditing()"
+          >
+            Edit Project
+          </button>
         }
         <a class="back-button" routerLink="/projects">Back to Projects</a>
       </div>
@@ -86,6 +93,7 @@
             type="button"
             [disabled]="isDeleting"
             [attr.aria-busy]="isDeleting"
+            [attr.aria-label]="'Delete ' + editProject.name"
             (click)="deleteProject()"
           >
             {{ isDeleting ? 'Deleting...' : 'Delete Project' }}
