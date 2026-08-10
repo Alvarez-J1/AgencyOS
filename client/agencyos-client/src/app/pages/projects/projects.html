@@ -79,9 +79,10 @@
   }
 
   <div class="projects-toolbar">
-    <label>
+    <label for="projects-search">
       Search projects
       <input
+        id="projects-search"
         type="search"
         placeholder="Search by project, client, status, or due date"
         [value]="searchTerm"
@@ -89,9 +90,9 @@
       />
     </label>
 
-    <label>
+    <label for="projects-status-filter">
       Status
-      <select [value]="selectedStatus" (change)="onStatusChange($event)">
+      <select id="projects-status-filter" [value]="selectedStatus" (change)="onStatusChange($event)">
         @for (status of statusOptions; track status) {
           <option [value]="status">{{ status }}</option>
         }
