@@ -175,9 +175,10 @@
   }
 
   <div class="tasks-toolbar">
-    <label>
+    <label for="tasks-search">
       Search tasks
       <input
+        id="tasks-search"
         type="search"
         placeholder="Search by task, project, assignee, or due date"
         [value]="searchTerm"
@@ -185,18 +186,18 @@
       />
     </label>
 
-    <label>
+    <label for="tasks-status-filter">
       Status
-      <select [value]="selectedStatus" (change)="onStatusChange($event)">
+      <select id="tasks-status-filter" [value]="selectedStatus" (change)="onStatusChange($event)">
         @for (status of statusOptions; track status) {
           <option [value]="status">{{ status }}</option>
         }
       </select>
     </label>
 
-    <label>
+    <label for="tasks-priority-filter">
       Priority
-      <select [value]="selectedPriority" (change)="onPriorityChange($event)">
+      <select id="tasks-priority-filter" [value]="selectedPriority" (change)="onPriorityChange($event)">
         @for (priority of priorityOptions; track priority) {
           <option [value]="priority">{{ priority }}</option>
         }
