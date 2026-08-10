@@ -26,19 +26,19 @@
           </div>
 
           <div class="settings-fields">
-            <label>
+            <label for="settings-profile-name">
               Full name
-              <input type="text" name="name" [(ngModel)]="settings.profile.name" />
+              <input id="settings-profile-name" type="text" name="name" [(ngModel)]="settings.profile.name" />
             </label>
 
-            <label>
+            <label for="settings-profile-email">
               Email
-              <input type="email" name="email" [(ngModel)]="settings.profile.email" />
+              <input id="settings-profile-email" type="email" name="email" [(ngModel)]="settings.profile.email" />
             </label>
 
-            <label>
+            <label for="settings-profile-role">
               Role
-              <input type="text" name="role" [(ngModel)]="settings.profile.role" />
+              <input id="settings-profile-role" type="text" name="role" [(ngModel)]="settings.profile.role" />
             </label>
           </div>
         </article>
@@ -50,19 +50,19 @@
           </div>
 
           <div class="settings-fields">
-            <label>
+            <label for="settings-company-name">
               Company name
-              <input type="text" name="companyName" [(ngModel)]="settings.company.companyName" />
+              <input id="settings-company-name" type="text" name="companyName" [(ngModel)]="settings.company.companyName" />
             </label>
 
-            <label>
+            <label for="settings-company-website">
               Website
-              <input type="url" name="website" [(ngModel)]="settings.company.website" />
+              <input id="settings-company-website" type="url" name="website" [(ngModel)]="settings.company.website" />
             </label>
 
-            <label>
+            <label for="settings-team-size">
               Team size
-              <select name="teamSize" [(ngModel)]="settings.company.teamSize">
+              <select id="settings-team-size" name="teamSize" [(ngModel)]="settings.company.teamSize">
                 @for (option of teamSizeOptions; track option) {
                   <option [value]="option">{{ option }}</option>
                 }
