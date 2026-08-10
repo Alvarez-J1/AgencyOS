@@ -36,47 +36,47 @@
         }
 
         <form class="create-form" (ngSubmit)="createTask()">
-          <label>
+          <label for="new-task-title-field">
             Task title
-            <input type="text" name="task-title" [(ngModel)]="newTask.title" />
+            <input id="new-task-title-field" type="text" name="task-title" [(ngModel)]="newTask.title" />
           </label>
 
-          <label>
+          <label for="new-task-project">
             Project
-            <input type="text" name="task-project" [(ngModel)]="newTask.project" />
+            <input id="new-task-project" type="text" name="task-project" [(ngModel)]="newTask.project" />
           </label>
 
-          <label>
+          <label for="new-task-assignee">
             Assignee
-            <input type="text" name="task-assignee" [(ngModel)]="newTask.assignee" />
+            <input id="new-task-assignee" type="text" name="task-assignee" [(ngModel)]="newTask.assignee" />
           </label>
 
-          <label>
+          <label for="new-task-status">
             Status
-            <select name="task-status" [(ngModel)]="newTask.status">
+            <select id="new-task-status" name="task-status" [(ngModel)]="newTask.status">
               @for (status of createStatusOptions; track status) {
                 <option [value]="status">{{ status }}</option>
               }
             </select>
           </label>
 
-          <label>
+          <label for="new-task-priority">
             Priority
-            <select name="task-priority" [(ngModel)]="newTask.priority">
+            <select id="new-task-priority" name="task-priority" [(ngModel)]="newTask.priority">
               @for (priority of createPriorityOptions; track priority) {
                 <option [value]="priority">{{ priority }}</option>
               }
             </select>
           </label>
 
-          <label>
+          <label for="new-task-due-date">
             Due date
-            <input type="date" name="task-due-date" [(ngModel)]="newTask.dueDate" />
+            <input id="new-task-due-date" type="date" name="task-due-date" [(ngModel)]="newTask.dueDate" />
           </label>
 
-          <label class="full-field">
+          <label class="full-field" for="new-task-notes">
             Description/notes
-            <textarea name="task-notes" rows="4" [(ngModel)]="newTask.notes"></textarea>
+            <textarea id="new-task-notes" name="task-notes" rows="4" [(ngModel)]="newTask.notes"></textarea>
           </label>
 
           <div class="modal-actions">
