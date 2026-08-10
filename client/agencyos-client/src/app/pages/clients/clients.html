@@ -95,7 +95,13 @@
             <div class="client-meta-item">
               <dt class="client-card-label">Email:</dt>
               <dd class="client-card-value">
-                <a class="client-email" href="mailto:{{ client.email }}">{{ client.email }}</a>
+                <a
+                  class="client-email"
+                  href="mailto:{{ client.email }}"
+                  [attr.aria-label]="'Email ' + client.name + ' at ' + client.email"
+                >
+                  {{ client.email }}
+                </a>
               </dd>
             </div>
 
@@ -125,7 +131,12 @@
           </dl>
 
           <div class="client-actions">
-            <a class="client-view-link" [routerLink]="['/clients', getClientRouteId(client)]">View</a>
+            <a
+              class="client-view-link"
+              [routerLink]="['/clients', getClientRouteId(client)]"
+              [attr.aria-label]="'View ' + client.name + ' details'"
+              >View</a
+            >
           </div>
         </div>
       }
