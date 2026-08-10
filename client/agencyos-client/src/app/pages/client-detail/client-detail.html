@@ -42,38 +42,38 @@
         </div>
 
         <div class="edit-grid">
-          <label>
+          <label for="edit-client-name">
             Client name
-            <input type="text" name="name" [(ngModel)]="editClient.name" />
+            <input id="edit-client-name" type="text" name="name" [(ngModel)]="editClient.name" />
           </label>
 
-          <label>
+          <label for="edit-client-company">
             Company
-            <input type="text" name="company" [(ngModel)]="editClient.company" />
+            <input id="edit-client-company" type="text" name="company" [(ngModel)]="editClient.company" />
           </label>
 
-          <label>
+          <label for="edit-client-email">
             Email
-            <input type="email" name="email" [(ngModel)]="editClient.email" />
+            <input id="edit-client-email" type="email" name="email" [(ngModel)]="editClient.email" />
           </label>
 
-          <label>
+          <label for="edit-client-status">
             Status
-            <select name="status" [(ngModel)]="editClient.status">
+            <select id="edit-client-status" name="status" [(ngModel)]="editClient.status">
               @for (status of statusOptions; track status) {
                 <option [value]="status">{{ status }}</option>
               }
             </select>
           </label>
 
-          <label>
+          <label for="edit-client-active-projects">
             Active projects
-            <input type="number" min="0" name="activeProjects" [(ngModel)]="editClient.activeProjects" />
+            <input id="edit-client-active-projects" type="number" min="0" name="activeProjects" [(ngModel)]="editClient.activeProjects" />
           </label>
 
-          <label>
+          <label for="edit-client-last-contact">
             Last contact
-            <input type="text" name="lastContact" [(ngModel)]="editClient.lastContact" />
+            <input id="edit-client-last-contact" type="text" name="lastContact" [(ngModel)]="editClient.lastContact" />
           </label>
         </div>
 
