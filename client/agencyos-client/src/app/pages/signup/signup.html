@@ -120,7 +120,7 @@
           />
           <button
             type="button"
-            aria-controls="signup-password"
+            aria-controls="signup-password signup-confirm-password"
             [attr.aria-label]="showPassword ? 'Hide passwords' : 'Show passwords'"
             (click)="togglePassword()"
           >
@@ -132,18 +132,20 @@
         }
       </label>
 
-      <label>
+      <label for="signup-confirm-password">
         Confirm password
         <input
+          id="signup-confirm-password"
           name="confirmPassword"
           [type]="showPassword ? 'text' : 'password'"
           placeholder="Repeat password"
           [(ngModel)]="form.confirmPassword"
           [class.input-error]="confirmPasswordInvalid"
           [attr.aria-invalid]="confirmPasswordInvalid"
+          [attr.aria-describedby]="confirmPasswordInvalid ? 'signup-confirm-password-error' : null"
         />
         @if (confirmPasswordInvalid) {
-          <span class="field-error">Passwords must match.</span>
+          <span id="signup-confirm-password-error" class="field-error">Passwords must match.</span>
         }
       </label>
 
