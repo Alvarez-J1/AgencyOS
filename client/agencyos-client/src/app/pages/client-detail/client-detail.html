@@ -13,8 +13,22 @@
 
       <div class="client-actions">
         @if (!isEditing) {
-          <button class="back-button" type="button" (click)="startEditing()">Edit Client</button>
-          <button class="danger-button" type="button" [disabled]="isDeleting" (click)="deleteClient()">
+          <button
+            class="back-button"
+            type="button"
+            [attr.aria-label]="'Edit ' + selectedClient.name"
+            (click)="startEditing()"
+          >
+            Edit Client
+          </button>
+          <button
+            class="danger-button"
+            type="button"
+            [disabled]="isDeleting"
+            [attr.aria-busy]="isDeleting"
+            [attr.aria-label]="'Delete ' + selectedClient.name"
+            (click)="deleteClient()"
+          >
             {{ isDeleting ? 'Deleting...' : 'Delete Client' }}
           </button>
         }
@@ -93,7 +107,13 @@
 
         <article class="card summary-card">
           <span class="summary-label">Email</span>
-          <a class="detail-link" href="mailto:{{ selectedClient.email }}">{{ selectedClient.email }}</a>
+          <a
+            class="detail-link"
+            href="mailto:{{ selectedClient.email }}"
+            [attr.aria-label]="'Email ' + selectedClient.name + ' at ' + selectedClient.email"
+          >
+            {{ selectedClient.email }}
+          </a>
         </article>
 
         <article class="card summary-card">
