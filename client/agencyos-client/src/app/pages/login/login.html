@@ -120,23 +120,30 @@
         }
       </label>
 
-      <label>
+      <label for="login-password">
         Password
         <div class="password-field">
           <input
+            id="login-password"
             name="password"
             [type]="showPassword ? 'text' : 'password'"
             [placeholder]="passwordPlaceholder"
             [(ngModel)]="form.password"
             [class.input-error]="passwordInvalid"
             [attr.aria-invalid]="passwordInvalid"
+            [attr.aria-describedby]="passwordInvalid ? 'login-password-error' : null"
           />
-          <button type="button" (click)="togglePassword()">
+          <button
+            type="button"
+            aria-controls="login-password"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+            (click)="togglePassword()"
+          >
             {{ showPassword ? 'Hide' : 'Show' }}
           </button>
         </div>
         @if (passwordInvalid) {
-          <span class="field-error">Password must be at least 8 characters.</span>
+          <span id="login-password-error" class="field-error">Password must be at least 8 characters.</span>
         }
       </label>
 
