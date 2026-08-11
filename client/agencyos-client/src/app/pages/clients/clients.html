@@ -10,7 +10,11 @@
   </div>
 
   @if (showCreateForm) {
-    <form class="client-form card" (ngSubmit)="createClient()">
+    <form
+      class="client-form card"
+      [attr.aria-describedby]="formErrorMessage ? 'new-client-form-error' : null"
+      (ngSubmit)="createClient()"
+    >
       <div class="client-form-header">
         <div>
           <h2>New Client</h2>
@@ -19,7 +23,7 @@
       </div>
 
       @if (formErrorMessage) {
-        <p class="form-error" role="alert">{{ formErrorMessage }}</p>
+        <p id="new-client-form-error" class="form-error" role="alert">{{ formErrorMessage }}</p>
       }
 
       <div class="client-form-grid">
