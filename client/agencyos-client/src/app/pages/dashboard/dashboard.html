@@ -575,9 +575,8 @@
           @if (upcomingDeadlines.length > 0) {
             <div class="deadline-list">
               @for (deadline of upcomingDeadlines; track deadline.title) {
-                <button
+                <article
                   class="deadline-item"
-                  type="button"
                   [class.deadline-due-soon]="deadline.urgency === 'due-soon'"
                   [class.deadline-today]="deadline.urgencyLabel === 'Due today'"
                   [class.deadline-upcoming]="deadline.urgency === 'upcoming'"
@@ -591,7 +590,7 @@
                     </span>
                   </span>
                   <span class="urgency-pill">{{ deadline.urgencyLabel }}</span>
-                </button>
+                </article>
               }
             </div>
           } @else {
