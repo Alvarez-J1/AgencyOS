@@ -18,7 +18,11 @@
   </div>
 
   <div class="topbar-actions">
-    <a class="account-link" routerLink="/settings" aria-label="Open account settings">
+    <a
+      class="account-link"
+      routerLink="/settings"
+      [attr.aria-label]="'Open account settings for ' + displayName"
+    >
       <span class="account-avatar" aria-hidden="true">{{ userInitials }}</span>
       <span class="account-copy">
         <strong>{{ displayName }}</strong>
