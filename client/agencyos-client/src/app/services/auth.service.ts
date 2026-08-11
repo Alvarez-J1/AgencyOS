@@ -37,7 +37,17 @@ export class AuthService {
 
   getCurrentUser(): AuthUser | null {
     const rawUser = localStorage.getItem(this.userKey);
-    return rawUser ? (JSON.parse(rawUser) as AuthUser) : null;
+
+    if (!rawUser) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(rawUser) as AuthUser;
+    } catch {
+      localStorage.removeItem(this.userKey);
+      return null;
+    }
   }
 
   updateCurrentUser(updates: Partial<AuthUser>): void {
