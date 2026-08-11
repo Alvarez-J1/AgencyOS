@@ -100,9 +100,16 @@
                 height="68"
                 fill="transparent"
                 cursor="crosshair"
+                role="button"
+                tabindex="0"
+                [attr.aria-label]="'Show workspace health for ' + point.dateLabel"
                 [attr.x]="point.x - 5"
                 (mouseenter)="setHoveredWorkspaceHealthPoint(point)"
+                (focus)="setHoveredWorkspaceHealthPoint(point)"
+                (blur)="clearHoveredWorkspaceHealthPoint()"
                 (click)="setHoveredWorkspaceHealthPoint(point)"
+                (keydown.enter)="setHoveredWorkspaceHealthPoint(point)"
+                (keydown.space)="setHoveredWorkspaceHealthPoint(point); $event.preventDefault()"
                 (touchstart)="setHoveredWorkspaceHealthPoint(point)"
               />
             }
