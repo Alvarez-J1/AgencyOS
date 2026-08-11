@@ -34,10 +34,14 @@
         </div>
 
         @if (formErrorMessage) {
-          <p class="form-error" role="alert">{{ formErrorMessage }}</p>
+          <p id="new-project-form-error" class="form-error" role="alert">{{ formErrorMessage }}</p>
         }
 
-        <form class="create-form" (ngSubmit)="createProject()">
+        <form
+          class="create-form"
+          [attr.aria-describedby]="formErrorMessage ? 'new-project-form-error' : null"
+          (ngSubmit)="createProject()"
+        >
           <label for="new-project-name">
             Project name
             <input id="new-project-name" type="text" name="project-name" [(ngModel)]="newProject.name" />
