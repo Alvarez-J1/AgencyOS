@@ -140,6 +140,7 @@
           <button
             type="button"
             aria-controls="login-password"
+            [attr.aria-pressed]="showPassword"
             [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
             (click)="togglePassword()"
           >
