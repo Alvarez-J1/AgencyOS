@@ -169,7 +169,14 @@
           </label>
 
           <div class="modal-actions task-edit-actions">
-            <button class="danger-button" type="button" [disabled]="isDeleting" [attr.aria-busy]="isDeleting" (click)="deleteTask()">
+            <button
+              class="danger-button"
+              type="button"
+              [disabled]="isDeleting"
+              [attr.aria-busy]="isDeleting"
+              [attr.aria-label]="'Delete ' + editTask.title"
+              (click)="deleteTask()"
+            >
               {{ isDeleting ? 'Deleting...' : 'Delete task' }}
             </button>
             <button class="secondary-button" type="button" (click)="closeEditModal()">Cancel</button>
