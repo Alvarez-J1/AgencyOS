@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
-import { Client, ClientStatus } from '../../models/client.model';
+import { Client } from '../../models/client.model';
 import { ClientService, CreateClientRequest } from '../../services/client.service';
 
 @Component({
@@ -115,7 +115,7 @@ export class ClientsComponent implements OnInit {
       name: '',
       company: '',
       email: '',
-      status: 'Active' as ClientStatus
+      status: 'Active'
     };
   }
 }
