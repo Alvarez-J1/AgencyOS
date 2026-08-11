@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Task, TaskPriority, TaskStatus } from '../../models/task.model';
@@ -129,6 +129,18 @@ export class TasksComponent implements OnInit {
     this.showEditModal = false;
     this.formErrorMessage = '';
     this.editTask = undefined;
+  }
+
+  @HostListener('document:keydown.escape')
+  closeModalWithEscape(): void {
+    if (this.showCreateModal) {
+      this.closeCreateModal();
+      return;
+    }
+
+    if (this.showEditModal) {
+      this.closeEditModal();
+    }
   }
 
   saveTask(): void {
