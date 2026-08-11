@@ -117,10 +117,14 @@
         </div>
 
         @if (formErrorMessage) {
-          <p class="form-error" role="alert">{{ formErrorMessage }}</p>
+          <p id="edit-task-form-error" class="form-error" role="alert">{{ formErrorMessage }}</p>
         }
 
-        <form class="create-form" (ngSubmit)="saveTask()">
+        <form
+          class="create-form"
+          [attr.aria-describedby]="formErrorMessage ? 'edit-task-form-error' : null"
+          (ngSubmit)="saveTask()"
+        >
           <label for="edit-task-title-field">
             Task title
             <input id="edit-task-title-field" type="text" name="edit-task-title-field" [(ngModel)]="editTask.title" />
