@@ -125,6 +125,7 @@
           <button
             type="button"
             aria-controls="signup-password signup-confirm-password"
+            [attr.aria-pressed]="showPassword"
             [attr.aria-label]="showPassword ? 'Hide passwords' : 'Show passwords'"
             (click)="togglePassword()"
           >
