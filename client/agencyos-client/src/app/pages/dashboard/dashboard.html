@@ -262,7 +262,8 @@
                 class="metric-sparkline"
                 viewBox="0 0 108 30"
                 preserveAspectRatio="none"
-                aria-hidden="true"
+                role="img"
+                [attr.aria-label]="metric.title + ' trend sparkline'"
               >
                 <path
                   class="metric-sparkline-area"
