@@ -32,10 +32,14 @@
         </div>
 
         @if (formErrorMessage) {
-          <p class="form-error" role="alert">{{ formErrorMessage }}</p>
+          <p id="new-task-form-error" class="form-error" role="alert">{{ formErrorMessage }}</p>
         }
 
-        <form class="create-form" (ngSubmit)="createTask()">
+        <form
+          class="create-form"
+          [attr.aria-describedby]="formErrorMessage ? 'new-task-form-error' : null"
+          (ngSubmit)="createTask()"
+        >
           <label for="new-task-title-field">
             Task title
             <input id="new-task-title-field" type="text" name="task-title" [(ngModel)]="newTask.title" />
