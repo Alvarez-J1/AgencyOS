@@ -78,12 +78,28 @@ export class TasksComponent implements OnInit {
 
   onStatusChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
-    this.selectedStatus = select.value as TaskStatus | 'All';
+    const value = select.value;
+
+    if (this.isStatusFilter(value)) {
+      this.selectedStatus = value;
+    }
   }
 
   onPriorityChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
-    this.selectedPriority = select.value as TaskPriority | 'All';
+    const value = select.value;
+
+    if (this.isPriorityFilter(value)) {
+      this.selectedPriority = value;
+    }
+  }
+
+  private isStatusFilter(value: string): value is TaskStatus | 'All' {
+    return this.statusOptions.includes(value as TaskStatus | 'All');
+  }
+
+  private isPriorityFilter(value: string): value is TaskPriority | 'All' {
+    return this.priorityOptions.includes(value as TaskPriority | 'All');
   }
 
   openCreateModal(): void {
