@@ -6,7 +6,7 @@
       (click)="nav.toggle()"
       [attr.aria-expanded]="nav.isOpen()"
       aria-controls="primary-navigation"
-      aria-label="Open navigation menu"
+      [attr.aria-label]="nav.isOpen() ? 'Close navigation menu' : 'Open navigation menu'"
     >
       <svg lucideMenu class="nav-icon" aria-hidden="true"></svg>
     </button>
