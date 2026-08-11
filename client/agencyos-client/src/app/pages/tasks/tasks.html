@@ -291,7 +291,11 @@
               class="complete-button"
               type="button"
               [disabled]="task.status === 'Completed' || updatingTaskId === task.id"
-              [attr.aria-label]="'Mark ' + task.title + ' complete'"
+              [attr.aria-label]="
+                task.status === 'Completed'
+                  ? task.title + ' is already complete'
+                  : 'Mark ' + task.title + ' complete'
+              "
               [attr.aria-busy]="updatingTaskId === task.id"
               (click)="markComplete(task.id)"
             >
