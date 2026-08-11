@@ -67,10 +67,14 @@
     </div>
 
     @if (errorMessage) {
-      <div class="form-alert" role="alert">{{ errorMessage }}</div>
+      <div id="signup-form-alert" class="form-alert" role="alert">{{ errorMessage }}</div>
     }
 
-    <form class="auth-form-modern" (ngSubmit)="submit()">
+    <form
+      class="auth-form-modern"
+      [attr.aria-describedby]="errorMessage ? 'signup-form-alert' : null"
+      (ngSubmit)="submit()"
+    >
       <label for="signup-name">
         Name
         <input
