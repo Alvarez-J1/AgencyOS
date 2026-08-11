@@ -282,9 +282,19 @@
                     y="0"
                     height="30"
                     fill="transparent"
+                    role="button"
+                    tabindex="0"
+                    [attr.aria-label]="
+                      'Show ' + metric.title + ' for ' + point.label + ': ' + point.formattedValue
+                    "
                     [attr.x]="point.hitX"
                     [attr.width]="point.hitWidth"
                     (mouseenter)="setHoveredMetricSparklinePoint(metric, point)"
+                    (focus)="setHoveredMetricSparklinePoint(metric, point)"
+                    (blur)="clearHoveredMetricSparklinePoint(metric)"
+                    (click)="setHoveredMetricSparklinePoint(metric, point)"
+                    (keydown.enter)="setHoveredMetricSparklinePoint(metric, point)"
+                    (keydown.space)="setHoveredMetricSparklinePoint(metric, point); $event.preventDefault()"
                     (touchstart)="setHoveredMetricSparklinePoint(metric, point)"
                   />
                 }
