@@ -71,7 +71,15 @@ export class ProjectsComponent implements OnInit {
 
   onStatusChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
-    this.selectedStatus = select.value as ProjectStatus | 'All';
+    const value = select.value;
+
+    if (this.isStatusFilter(value)) {
+      this.selectedStatus = value;
+    }
+  }
+
+  private isStatusFilter(value: string): value is ProjectStatus | 'All' {
+    return this.statusOptions.includes(value as ProjectStatus | 'All');
   }
 
   getProjectRouteId(project: Project): number | string {
