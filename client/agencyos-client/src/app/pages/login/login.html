@@ -72,7 +72,7 @@
     </div>
 
     @if (errorMessage) {
-      <div class="form-alert" role="alert">{{ errorMessage }}</div>
+      <div id="login-form-alert" class="form-alert" role="alert">{{ errorMessage }}</div>
     }
 
     <div class="demo-access">
@@ -102,7 +102,11 @@
       <span>or sign in</span>
     </div>
 
-    <form class="auth-form-modern" (ngSubmit)="submit()">
+    <form
+      class="auth-form-modern"
+      [attr.aria-describedby]="errorMessage ? 'login-form-alert' : null"
+      (ngSubmit)="submit()"
+    >
       <label for="login-email">
         Email
         <input
