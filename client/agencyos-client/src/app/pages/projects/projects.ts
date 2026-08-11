@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -87,6 +87,13 @@ export class ProjectsComponent implements OnInit {
     this.showCreateModal = false;
     this.formErrorMessage = '';
     this.newProject = this.getEmptyProjectForm();
+  }
+
+  @HostListener('document:keydown.escape')
+  closeModalWithEscape(): void {
+    if (this.showCreateModal) {
+      this.closeCreateModal();
+    }
   }
 
   createProject(): void {
