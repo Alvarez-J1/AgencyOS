@@ -51,11 +51,12 @@
     @if (isEditing && editClient) {
       <form
         class="card client-edit-form"
+        aria-labelledby="edit-client-heading"
         [attr.aria-describedby]="errorMessage ? 'client-detail-error' : null"
         (ngSubmit)="saveClient()"
       >
         <div class="section-heading">
-          <h2>Edit Client</h2>
+          <h2 id="edit-client-heading">Edit Client</h2>
           <p>Update the client options stored in the AgencyOS backend.</p>
         </div>
 
