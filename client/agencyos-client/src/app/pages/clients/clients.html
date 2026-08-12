@@ -12,12 +12,13 @@
   @if (showCreateForm) {
     <form
       class="client-form card"
+      aria-labelledby="new-client-heading"
       [attr.aria-describedby]="formErrorMessage ? 'new-client-form-error' : null"
       (ngSubmit)="createClient()"
     >
       <div class="client-form-header">
         <div>
-          <h2>New Client</h2>
+          <h2 id="new-client-heading">New Client</h2>
           <p>Add a new client to your workspace.</p>
         </div>
       </div>
