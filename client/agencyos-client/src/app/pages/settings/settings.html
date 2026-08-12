@@ -17,7 +17,11 @@
       <p>{{ errorMessage }}</p>
     </div>
   } @else if (settings) {
-    <form class="settings-form-shell" (ngSubmit)="saveSettings()">
+    <form
+      class="settings-form-shell"
+      aria-describedby="settings-save-message"
+      (ngSubmit)="saveSettings()"
+    >
       <div class="settings-grid">
         <article class="card settings-section">
           <div>
@@ -114,6 +118,7 @@
           Save Settings
         </button>
         <p
+          id="settings-save-message"
           class="settings-save-message"
           [class.is-visible]="isSaving || successMessage || errorMessage"
           [class.is-error]="errorMessage"
