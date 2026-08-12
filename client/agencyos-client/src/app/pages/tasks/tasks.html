@@ -107,6 +107,7 @@
   @if (showEditModal && editTask) {
     <div class="modal-backdrop" role="presentation" (click)="closeEditModal()">
       <section
+        id="edit-task-dialog"
         class="create-modal"
         role="dialog"
         aria-modal="true"
@@ -294,7 +295,15 @@
           </dl>
 
           <div class="task-actions">
-            <button class="edit-button" type="button" [attr.aria-label]="'Edit ' + task.title" (click)="openEditModal(task)">
+            <button
+              class="edit-button"
+              type="button"
+              aria-controls="edit-task-dialog"
+              aria-haspopup="dialog"
+              [attr.aria-expanded]="showEditModal && editTask?.id === task.id"
+              [attr.aria-label]="'Edit ' + task.title"
+              (click)="openEditModal(task)"
+            >
               Edit
             </button>
             <button
