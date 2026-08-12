@@ -6,11 +6,20 @@
       <p class="page-description">View your clients, track their projects, and stay on top of every account.</p>
     </div>
 
-    <button class="primary-button" type="button" (click)="openCreateForm()">New Client</button>
+    <button
+      class="primary-button"
+      type="button"
+      aria-controls="new-client-form"
+      [attr.aria-expanded]="showCreateForm"
+      (click)="openCreateForm()"
+    >
+      New Client
+    </button>
   </div>
 
   @if (showCreateForm) {
     <form
+      id="new-client-form"
       class="client-form card"
       aria-labelledby="new-client-heading"
       [attr.aria-describedby]="formErrorMessage ? 'new-client-form-error' : null"
@@ -150,7 +159,15 @@
     <div class="state-panel">
       <h2>No clients found</h2>
       <p>No clients yet. Add your first client to get started.</p>
-      <button class="primary-button" type="button" (click)="openCreateForm()">New Client</button>
+      <button
+        class="primary-button"
+        type="button"
+        aria-controls="new-client-form"
+        [attr.aria-expanded]="showCreateForm"
+        (click)="openCreateForm()"
+      >
+        New Client
+      </button>
     </div>
   }
 </section>
