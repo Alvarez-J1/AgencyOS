@@ -6,12 +6,22 @@
       <p class="page-description">View active projects, monitor progress, and stay on schedule.</p>
     </div>
 
-    <button class="primary-button" type="button" (click)="openCreateModal()">New project</button>
+    <button
+      class="primary-button"
+      type="button"
+      aria-controls="new-project-dialog"
+      aria-haspopup="dialog"
+      [attr.aria-expanded]="showCreateModal"
+      (click)="openCreateModal()"
+    >
+      New project
+    </button>
   </div>
 
   @if (showCreateModal) {
     <div class="modal-backdrop" role="presentation" (click)="closeCreateModal()">
       <section
+        id="new-project-dialog"
         class="create-modal"
         role="dialog"
         aria-modal="true"
@@ -176,7 +186,16 @@
     <div class="state-panel">
       <h2>No projects found</h2>
       <p>Try a different search term or status filter, or create a new project.</p>
-      <button class="primary-button" type="button" (click)="openCreateModal()">New project</button>
+      <button
+        class="primary-button"
+        type="button"
+        aria-controls="new-project-dialog"
+        aria-haspopup="dialog"
+        [attr.aria-expanded]="showCreateModal"
+        (click)="openCreateModal()"
+      >
+        New project
+      </button>
     </div>
   }
 </section>
