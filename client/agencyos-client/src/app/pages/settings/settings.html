@@ -56,7 +56,13 @@
           <div class="settings-fields">
             <label for="settings-company-name">
               Company name
-              <input id="settings-company-name" type="text" name="companyName" [(ngModel)]="settings.company.companyName" />
+              <input
+                id="settings-company-name"
+                type="text"
+                name="companyName"
+                autocomplete="organization"
+                [(ngModel)]="settings.company.companyName"
+              />
             </label>
 
             <label for="settings-company-website">
