@@ -6,12 +6,22 @@
       <p class="page-description">View, organize, and complete tasks across your workspace.</p>
     </div>
 
-    <button class="primary-button" type="button" (click)="openCreateModal()">New task</button>
+    <button
+      class="primary-button"
+      type="button"
+      aria-controls="new-task-dialog"
+      aria-haspopup="dialog"
+      [attr.aria-expanded]="showCreateModal"
+      (click)="openCreateModal()"
+    >
+      New task
+    </button>
   </div>
 
   @if (showCreateModal) {
     <div class="modal-backdrop" role="presentation" (click)="closeCreateModal()">
       <section
+        id="new-task-dialog"
         class="create-modal"
         role="dialog"
         aria-modal="true"
@@ -309,7 +319,16 @@
     <div class="state-panel">
       <h2>No tasks found</h2>
       <p>Try a different search term, status, or priority filter, or create a new task.</p>
-      <button class="primary-button" type="button" (click)="openCreateModal()">New task</button>
+      <button
+        class="primary-button"
+        type="button"
+        aria-controls="new-task-dialog"
+        aria-haspopup="dialog"
+        [attr.aria-expanded]="showCreateModal"
+        (click)="openCreateModal()"
+      >
+        New task
+      </button>
     </div>
   }
 </section>
