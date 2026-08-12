@@ -28,7 +28,7 @@
 
     @if (errorMessage) {
       <div class="state-panel state-panel-error compact-state" role="alert">
-        <p>{{ errorMessage }}</p>
+        <p id="project-detail-error">{{ errorMessage }}</p>
       </div>
     }
 
@@ -39,7 +39,11 @@
     }
 
     @if (isEditing && editProject) {
-      <form class="card project-edit-form" (ngSubmit)="saveProject()">
+      <form
+        class="card project-edit-form"
+        [attr.aria-describedby]="errorMessage ? 'project-detail-error' : null"
+        (ngSubmit)="saveProject()"
+      >
         <div class="section-heading">
           <h2>Edit Project</h2>
           <p>Update this project's client, delivery status, timeline, and progress.</p>
