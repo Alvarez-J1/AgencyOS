@@ -44,11 +44,11 @@ app.use(helmet());
 app.use(cors({ origin: createCorsOrigin() }));
 app.use(express.json({ limit: requestBodyLimit }));
 
-app.head('/api/health', (_req, res) => {
+app.head(['/health', '/api/health'], (_req, res) => {
   res.status(200).end();
 });
 
-app.get('/api/health', (_req, res) => {
+app.get(['/health', '/api/health'], (_req, res) => {
   res.status(200).json({ status: 'ok' });
 });
 
