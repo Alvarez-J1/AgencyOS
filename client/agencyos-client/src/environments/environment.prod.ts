@@ -8,5 +8,5 @@
 // proxied under the same domain), set apiBaseUrl: '' to use same-origin requests.
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://agencyos-80ef9.containers.snapdeploy.app'
+  apiBaseUrl: 'https://agencyos-129-213-50-133.sslip.io'
 };
